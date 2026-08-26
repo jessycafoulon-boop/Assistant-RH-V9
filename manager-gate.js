@@ -150,7 +150,7 @@ function renderLinkResource(resource){
           ${escapeHtml(resource.description)}
         </div>
       </div>
-      <a class="manager-resource-link" href="${escapeHtml(resource.url)}" target="_blank" rel="noopener">
+      <a class="manager-resource-link" href="${escapeHtml(resource.url)}">
         ${escapeHtml(resource.linkLabel || "Ouvrir")}
       </a>
     </div>
@@ -161,7 +161,7 @@ function renderLinkListResource(resource){
   const links = (resource.links || []).map(link => `
     <div class="manager-resource-sublink">
       <span class="manager-resource-sublink-label">${escapeHtml(link.label)}</span>
-      <a class="manager-resource-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener">
+      <a class="manager-resource-link" href="${escapeHtml(link.url)}">
         ${escapeHtml(link.linkLabel || "Ouvrir")}
       </a>
     </div>
@@ -467,7 +467,7 @@ function renderContactsResults(indexed, rawQuery, resultsEl){
   resultsEl.innerHTML = top.map(({ item }) => `
     <div class="manager-contact-card">
       <div class="manager-contact-name">${escapeHtml(item.icon || "🧭")} ${escapeHtml(item.title || "")}</div>
-      <a class="manager-resource-link" href="${escapeHtml(item.url || "#")}" target="_blank" rel="noopener">
+      <a class="manager-resource-link" href="${escapeHtml(item.url || "#")}">
         ${escapeHtml(item.linkLabel || "Ouvrir la page intranet")}
       </a>
     </div>
