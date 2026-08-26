@@ -117,6 +117,40 @@ const MISSION_STEPS = [
 
 let missionCurrentStep = 0;
 
+/* =========================================================
+   SCINTILLEMENT DU BOUTON DE LANCEMENT
+   Actif tant que le joueur n'a pas cliqué pour démarrer.
+========================================================= */
+(function initGameLaunchPulse(){
+  function setup(){
+    const btn = document.querySelector(".game-launch");
+    if(!btn) return;
+
+    const style = document.createElement("style");
+    style.id = "missionPulseStyles";
+    style.textContent = `
+      .game-launch{ animation: missionButtonPulse 1.6s ease-in-out infinite; }
+      @keyframes missionButtonPulse{
+        0%, 100% { box-shadow: 0 0 0 0 rgba(47,111,79,.45); }
+        50% { box-shadow: 0 0 0 10px rgba(47,111,79,0); }
+      }
+    `;
+    document.head.appendChild(style);
+    btn.classList.add("game-launch-pulse");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", setup);
+  }else{
+    setup();
+  }
+})();
+
+function stopGameLaunchPulse(){
+  const btn = document.querySelector(".game-launch");
+  if(btn) btn.style.animation = "none";
+}
+
 function injectMissionStyles(){
   if(document.getElementById("missionStyles")) return;
   const style = document.createElement("style");
@@ -438,6 +472,7 @@ function quitMission(){
 
 // Nom conservé pour rester compatible avec le bouton existant dans index.html
 function startTreasureHunt(){
+  stopGameLaunchPulse();
   injectMissionStyles();
   missionCurrentStep = 0;
 
