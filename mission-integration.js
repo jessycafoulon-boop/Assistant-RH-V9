@@ -365,7 +365,7 @@ function showMissionResource(step){
         <div class="mission-resource-title">${escapeMissionHtml(step.resource.title)}</div>
         ${step.resource.note ? `<div class="mission-resource-sub">${escapeMissionHtml(step.resource.note)}</div>` : ""}
       </div>
-      <a class="mission-resource-link" href="${escapeMissionHtml(step.resource.url)}" target="_blank" rel="noopener">
+      <a class="mission-resource-link" href="${escapeMissionHtml(step.resource.url)}">
         ${escapeMissionHtml(step.resource.linkLabel || "Voir")}
       </a>
     </div>
@@ -466,10 +466,16 @@ function showMissionFinale(){
 
   document.getElementById("missionRestart").addEventListener("click", startTreasureHunt);
   toggleWelcomeMessage(true);
+  toggleSearchbar(true);
 }
 
 function toggleWelcomeMessage(visible){
   const el = document.getElementById("welcomeMessage");
+  if(el) el.style.display = visible ? "" : "none";
+}
+
+function toggleSearchbar(visible){
+  const el = document.querySelector(".searchbar");
   if(el) el.style.display = visible ? "" : "none";
 }
 
@@ -479,6 +485,7 @@ function quitMission(){
   if(gameContainer) gameContainer.classList.add("hidden");
   if(welcome) welcome.classList.remove("hidden");
   toggleWelcomeMessage(true);
+  toggleSearchbar(true);
 }
 
 // Nom conservé pour rester compatible avec le bouton existant dans index.html
@@ -492,6 +499,7 @@ function startTreasureHunt(){
   if(welcome) welcome.classList.add("hidden");
   if(gameContainer) gameContainer.classList.remove("hidden");
   toggleWelcomeMessage(false);
+  toggleSearchbar(false);
 
   renderMissionNotification();
 }
