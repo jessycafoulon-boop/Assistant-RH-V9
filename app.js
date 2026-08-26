@@ -637,18 +637,8 @@ function openDocumentByKey(key){
     return;
   }
 
-  const opened =
-    window.open(
-      doc.url,
-      "_blank"
-    );
-
-  if(!opened){
-
-    window.location.href =
-      doc.url;
-
-  }
+  window.location.href =
+    doc.url;
 
 }
 
@@ -725,9 +715,7 @@ function showMobileDocumentNotice(doc){
 
           <a
             class="action primary"
-            href="${escapeHtml(doc.url)}"
-            target="_blank"
-            rel="noopener noreferrer">
+            href="${escapeHtml(doc.url)}">
 
             🔐 Ouvrir le document
 
@@ -1148,7 +1136,6 @@ addMessage(`
   </div>
 
 `);
-document.getElementById("chat").lastElementChild.id = "welcomeMessage";
 
 /* =========================================================
    RESTAURATION DU FEEDBACK
