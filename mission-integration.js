@@ -170,8 +170,12 @@ function injectMissionStyles(){
       }
       .mission-phone-screen{
         background:var(--surface, var(--panel,#faf9f6));border-radius:34px;
-        overflow-y:auto;max-height:700px;padding:28px 16px 20px;
+        overflow-y:auto;min-height:620px;max-height:700px;padding:28px 16px 20px;
       }
+      .mission-phone-screen.mission-screen-center{
+        display:flex;flex-direction:column;justify-content:center;
+      }
+      .mission-phone-screen .mission-wrap{width:100%;}
     }
     .mission-wrap{max-width:520px;margin:0 auto;padding:8px 4px 24px;}
     .mission-progress{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
@@ -444,7 +448,7 @@ function showMissionFinale(){
 
   container.innerHTML = `
     <div class="mission-phone-frame">
-      <div class="mission-phone-screen">
+      <div class="mission-phone-screen mission-screen-center">
         <div class="mission-wrap mission-finale">
           <div class="mission-confetti-layer">${confettiHtml}</div>
           <div>🏆 Mission accomplie !</div>
@@ -490,7 +494,7 @@ function renderMissionNotification(){
 
   container.innerHTML = `
     <div class="mission-phone-frame">
-      <div class="mission-phone-screen">
+      <div class="mission-phone-screen mission-screen-center">
         <div class="mission-wrap mission-notif-wrap">
           <div class="mission-notif-card" id="missionNotifCard">
             <div class="mission-notif-icon">💬</div>
