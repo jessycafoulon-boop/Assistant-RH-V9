@@ -1,4 +1,3 @@
-
 /* =========================================================
    CONFIGURATION
 ========================================================= */
@@ -1150,6 +1149,7 @@ addMessage(`
 
 `);
 document.getElementById("chat").lastElementChild.id = "welcomeMessage";
+
 /* =========================================================
    RESTAURATION DU FEEDBACK
 ========================================================= */
@@ -1171,4 +1171,3 @@ document.addEventListener("keydown", event => {
   if(event.key !== "Escape") return;
   closeDocumentModal();
 });
-
