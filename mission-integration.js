@@ -365,7 +365,7 @@ function showMissionResource(step){
         <div class="mission-resource-title">${escapeMissionHtml(step.resource.title)}</div>
         ${step.resource.note ? `<div class="mission-resource-sub">${escapeMissionHtml(step.resource.note)}</div>` : ""}
       </div>
-      <a class="mission-resource-link" href="${escapeMissionHtml(step.resource.url)}">
+      <a class="mission-resource-link" href="${escapeMissionHtml(step.resource.url)}" data-resource-link data-title="${escapeMissionHtml(step.resource.title)}">
         ${escapeMissionHtml(step.resource.linkLabel || "Voir")}
       </a>
     </div>
@@ -535,3 +535,72 @@ function openMissionChat(){
   addMissionBubble("Sam", MISSION_STEPS[0].message);
   renderMissionOptions();
 }
+
+/* =========================================================
+   POP-UP MOBILE AVANT OUVERTURE D'UN DOCUMENT INTRANET
+   (même logique et mêmes classes CSS que dans app.js)
+========================================================= */
+function isMobileDevice(){
+  return window.matchMedia("(max-width:600px)").matches;
+}
+
+function showMobileDocumentNotice(url, title){
+  const existing = document.getElementById("documentModal");
+  if(existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "documentModal";
+
+  modal.innerHTML = `
+    <div class="document-overlay" onclick="closeDocumentModal(event)">
+      <div class="document-modal" role="dialog" aria-modal="true"
+           aria-labelledby="documentModalTitle" onclick="event.stopPropagation()">
+
+        <button class="document-close" type="button" aria-label="Fermer"
+                onclick="closeDocumentModal()">✕</button>
+
+        <div class="document-icon">📄</div>
+
+        <h3 id="documentModalTitle">${escapeMissionHtml(title || "Document RH")}</h3>
+
+        <p>
+          Vous consultez ce document depuis un téléphone.
+          L'accès à certains documents de l'intranet peut nécessiter une reconnexion.
+        </p>
+
+        <p class="document-info">
+          Si l'intranet vous demande vos identifiants, connectez-vous puis
+          revenez dans votre navigateur.
+        </p>
+
+        <p class="document-info">
+          Après l'avoir consulté, balayez votre écran vers la gauche pour revenir
+          à votre assistant RH.
+        </p>
+
+        <div class="actions document-actions">
+          <a class="action primary" href="${escapeMissionHtml(url)}">🔐 Ouvrir le document</a>
+          <button class="action" type="button" onclick="closeDocumentModal()">Retour</button>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function closeDocumentModal(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById("documentModal");
+  if(modal) modal.remove();
+}
+
+document.addEventListener("click", event => {
+  const link = event.target.closest("[data-resource-link]");
+  if(!link) return;
+  if(!isMobileDevice()) return;
+
+  event.preventDefault();
+  showMobileDocumentNotice(link.getAttribute("href"), link.dataset.title || link.textContent.trim());
+});
