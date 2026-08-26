@@ -219,6 +219,14 @@ function renderFaqResource(resource){
     .manager-search-input{flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border,#ccc);font-size:14px;background:var(--panel,#fff);color:inherit;}
     .manager-search-count{font-size:12px;color:var(--muted,#777);white-space:nowrap;}
     .manager-search-highlight{background:#fff3a3;padding:0 2px;border-radius:2px;}
+    .manager-annuaire-search-bar{margin:12px 0;}
+    .manager-annuaire-input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border,#ccc);font-size:14px;background:var(--panel,#fff);color:inherit;box-sizing:border-box;}
+    .manager-annuaire-results{display:flex;flex-direction:column;gap:10px;}
+    .manager-annuaire-hint{font-size:13px;color:var(--muted,#777);padding:6px 2px;}
+    .manager-contact-card{border:1px solid var(--border,#ddd);border-radius:10px;padding:12px 14px;background:var(--panel,#fff);}
+    .manager-contact-name{font-weight:600;font-size:15px;margin-bottom:2px;}
+    .manager-contact-fonction{font-size:13px;color:var(--muted,#777);margin-bottom:6px;}
+    .manager-contact-line{font-size:13px;line-height:1.6;}
   `;
   document.head.appendChild(style);
 })();
@@ -350,6 +358,27 @@ function applyManagerSearch(rawQuery){
   }
 }
 
+function renderAnnuaireResource(resource){
+  return `
+    <div class="manager-resource manager-annuaire">
+      <div class="manager-resource-info">
+        <div class="manager-resource-title">
+          ${escapeHtml(resource.icon || "📇")} ${escapeHtml(resource.title)}
+        </div>
+        <div class="manager-resource-description">
+          ${escapeHtml(resource.description || "")}
+        </div>
+      </div>
+      <div class="manager-annuaire-search-bar">
+        <input type="search" class="manager-annuaire-input"
+               placeholder="🔎 Rechercher un contact par mot-clé…" autocomplete="off"
+               aria-label="Rechercher un contact dans l'annuaire">
+      </div>
+      <div class="manager-annuaire-results"></div>
+    </div>
+  `;
+}
+
 function renderResources(resourcesArray){
   const container = document.getElementById("managerResources");
   if(!container) return;
@@ -357,10 +386,70 @@ function renderResources(resourcesArray){
   container.innerHTML = resourcesArray.map(resource => {
     if(resource.type === "faq") return renderFaqResource(resource);
     if(resource.type === "linklist") return renderLinkListResource(resource);
+    if(resource.type === "annuaire") return renderAnnuaireResource(resource);
     return renderLinkResource(resource);
   }).join("");
 
   container.hidden = false;
+}
+
+/* =========================================================
+   ANNUAIRE — RECHERCHE DE CONTACTS PAR MOT-CLÉ
+   (jusqu'à 3 fiches contact affichées, classées par pertinence)
+========================================================= */
+function initAnnuaireSearches(resourcesArray){
+  const annuaireResources = resourcesArray.filter(r => r.type === "annuaire");
+  const containers = document.querySelectorAll(".manager-annuaire");
+
+  containers.forEach((container, i) => {
+    const contacts = (annuaireResources[i] && annuaireResources[i].contacts) || [];
+    const input = container.querySelector(".manager-annuaire-input");
+    const resultsEl = container.querySelector(".manager-annuaire-results");
+    if(!input || !resultsEl) return;
+
+    const indexed = contacts.map(c => ({
+      ...c,
+      _keywordsNorm: (c.keywords || []).map(k => stripAccents(String(k).toLowerCase())),
+      _nameNorm: stripAccents(String(c.name || "").toLowerCase())
+    }));
+
+    input.addEventListener("input", () => renderAnnuaireResults(indexed, input.value, resultsEl));
+  });
+}
+
+function renderAnnuaireResults(indexed, rawQuery, resultsEl){
+  const terms = stripAccents(rawQuery.trim().toLowerCase()).split(/\s+/).filter(Boolean);
+
+  if(terms.length === 0){
+    resultsEl.innerHTML = `<div class="manager-annuaire-hint">Tapez un mot-clé (ex. « paie », « retraite », « recrutement »…) pour trouver un contact.</div>`;
+    return;
+  }
+
+  const scored = indexed.map(c => {
+    let score = 0;
+    terms.forEach(term => {
+      if(c._keywordsNorm.some(k => k.includes(term))) score += 2;
+      if(c._nameNorm.includes(term)) score += 1;
+    });
+    return { contact: c, score };
+  }).filter(entry => entry.score > 0);
+
+  scored.sort((a, b) => b.score - a.score);
+  const top = scored.slice(0, 3);
+
+  if(top.length === 0){
+    resultsEl.innerHTML = `<div class="manager-annuaire-hint">Aucun contact ne correspond à « ${escapeHtml(rawQuery.trim())} ».</div>`;
+    return;
+  }
+
+  resultsEl.innerHTML = top.map(({ contact }) => `
+    <div class="manager-contact-card">
+      <div class="manager-contact-name">${escapeHtml(contact.icon || "👤")} ${escapeHtml(contact.name || "")}</div>
+      <div class="manager-contact-fonction">${escapeHtml(contact.fonction || "")}</div>
+      <div class="manager-contact-line">📞 ${escapeHtml(contact.tel || "—")}</div>
+      <div class="manager-contact-line">✉️ <a href="mailto:${escapeHtml(contact.email || "")}">${escapeHtml(contact.email || "—")}</a></div>
+    </div>
+  `).join("");
 }
 
 /* =========================================================
@@ -402,6 +491,7 @@ async function unlockManagerResources(){
     gate.hidden = true;
     renderResources(resources);
     initManagerSearch();
+    initAnnuaireSearches(resources);
   }else{
     managerFailedAttempts += 1;
 
