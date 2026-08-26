@@ -122,6 +122,23 @@ function injectMissionStyles(){
   const style = document.createElement("style");
   style.id = "missionStyles";
   style.textContent = `
+    .mission-phone-frame{width:100%;}
+    .mission-phone-screen{width:100%;}
+
+    @media (min-width: 700px){
+      .mission-phone-frame{
+        max-width:375px;margin:24px auto;background:#111;border-radius:46px;
+        padding:14px;box-shadow:0 24px 48px rgba(0,0,0,.18);position:relative;
+      }
+      .mission-phone-frame::before{
+        content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+        width:110px;height:22px;background:#111;border-radius:0 0 16px 16px;z-index:2;
+      }
+      .mission-phone-screen{
+        background:var(--surface, var(--panel,#faf9f6));border-radius:34px;
+        overflow-y:auto;max-height:700px;padding:28px 16px 20px;
+      }
+    }
     .mission-wrap{max-width:520px;margin:0 auto;padding:8px 4px 24px;}
     .mission-progress{display:flex;justify-content:center;gap:10px;margin-bottom:20px;}
     .mission-dot{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;
@@ -221,11 +238,15 @@ function renderMissionShell(){
   if(!container) return;
 
   container.innerHTML = `
-    <div class="mission-wrap">
-      <div class="mission-progress" id="missionProgress"></div>
-      <div class="mission-chat" id="missionChat"></div>
-      <div class="mission-options" id="missionOptions"></div>
-      <button type="button" class="mission-quit" id="missionQuit">← Quitter la mission</button>
+    <div class="mission-phone-frame">
+      <div class="mission-phone-screen">
+        <div class="mission-wrap">
+          <div class="mission-progress" id="missionProgress"></div>
+          <div class="mission-chat" id="missionChat"></div>
+          <div class="mission-options" id="missionOptions"></div>
+          <button type="button" class="mission-quit" id="missionQuit">← Quitter la mission</button>
+        </div>
+      </div>
     </div>
   `;
 
@@ -388,16 +409,20 @@ function showMissionFinale(){
   `).join("");
 
   container.innerHTML = `
-    <div class="mission-wrap mission-finale">
-      <div class="mission-confetti-layer">${confettiHtml}</div>
-      <div>🏆 Mission accomplie !</div>
-      ${keyringSvg}
-      <div class="mission-key-legend">${legendHtml}</div>
-      <div class="mission-finale-title">Trousseau complet !</div>
-      <div class="mission-finale-sub">
-        Bravo, vous avez aidé Sam à obtenir ses premières clés pour débuter à la Mairie. 🌿
+    <div class="mission-phone-frame">
+      <div class="mission-phone-screen">
+        <div class="mission-wrap mission-finale">
+          <div class="mission-confetti-layer">${confettiHtml}</div>
+          <div>🏆 Mission accomplie !</div>
+          ${keyringSvg}
+          <div class="mission-key-legend">${legendHtml}</div>
+          <div class="mission-finale-title">Trousseau complet !</div>
+          <div class="mission-finale-sub">
+            Bravo, vous avez aidé Sam à obtenir ses premières clés pour débuter à la Mairie. 🌿
+          </div>
+          <button type="button" class="mission-restart" id="missionRestart">Rejouer</button>
+        </div>
       </div>
-      <button type="button" class="mission-restart" id="missionRestart">Rejouer</button>
     </div>
   `;
 
@@ -429,16 +454,20 @@ function renderMissionNotification(){
   if(!container) return;
 
   container.innerHTML = `
-    <div class="mission-wrap mission-notif-wrap">
-      <div class="mission-notif-card" id="missionNotifCard">
-        <div class="mission-notif-icon">💬</div>
-        <div class="mission-notif-text">
-          <div class="mission-notif-title">Nouveau message</div>
-          <div class="mission-notif-sub">Sam vient de t'écrire…</div>
+    <div class="mission-phone-frame">
+      <div class="mission-phone-screen">
+        <div class="mission-wrap mission-notif-wrap">
+          <div class="mission-notif-card" id="missionNotifCard">
+            <div class="mission-notif-icon">💬</div>
+            <div class="mission-notif-text">
+              <div class="mission-notif-title">Nouveau message</div>
+              <div class="mission-notif-sub">Sam vient de t'écrire…</div>
+            </div>
+          </div>
+          <button type="button" class="mission-next" id="missionOpenChatBtn">Lire le message</button>
+          <button type="button" class="mission-quit" id="missionQuit">← Quitter la mission</button>
         </div>
       </div>
-      <button type="button" class="mission-next" id="missionOpenChatBtn">Lire le message</button>
-      <button type="button" class="mission-quit" id="missionQuit">← Quitter la mission</button>
     </div>
   `;
 
