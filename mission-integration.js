@@ -540,11 +540,11 @@ function openMissionChat(){
    POP-UP MOBILE AVANT OUVERTURE D'UN DOCUMENT INTRANET
    (même logique et mêmes classes CSS que dans app.js)
 ========================================================= */
-function isMobileDevice(){
+function missionIsMobileDevice(){
   return window.matchMedia("(max-width:600px)").matches;
 }
 
-function showMobileDocumentNotice(url, title){
+function missionShowMobileDocumentNotice(url, title){
   const existing = document.getElementById("documentModal");
   if(existing) existing.remove();
 
@@ -552,12 +552,12 @@ function showMobileDocumentNotice(url, title){
   modal.id = "documentModal";
 
   modal.innerHTML = `
-    <div class="document-overlay" onclick="closeDocumentModal(event)">
+    <div class="document-overlay" onclick="missionCloseDocumentModal(event)">
       <div class="document-modal" role="dialog" aria-modal="true"
            aria-labelledby="documentModalTitle" onclick="event.stopPropagation()">
 
         <button class="document-close" type="button" aria-label="Fermer"
-                onclick="closeDocumentModal()">✕</button>
+                onclick="missionCloseDocumentModal()">✕</button>
 
         <div class="document-icon">📄</div>
 
@@ -580,7 +580,7 @@ function showMobileDocumentNotice(url, title){
 
         <div class="actions document-actions">
           <a class="action primary" href="${escapeMissionHtml(url)}">🔐 Ouvrir le document</a>
-          <button class="action" type="button" onclick="closeDocumentModal()">Retour</button>
+          <button class="action" type="button" onclick="missionCloseDocumentModal()">Retour</button>
         </div>
 
       </div>
@@ -590,7 +590,7 @@ function showMobileDocumentNotice(url, title){
   document.body.appendChild(modal);
 }
 
-function closeDocumentModal(event){
+function missionCloseDocumentModal(event){
   if(event && event.target !== event.currentTarget) return;
   const modal = document.getElementById("documentModal");
   if(modal) modal.remove();
@@ -599,8 +599,8 @@ function closeDocumentModal(event){
 document.addEventListener("click", event => {
   const link = event.target.closest("[data-resource-link]");
   if(!link) return;
-  if(!isMobileDevice()) return;
+  if(!missionIsMobileDevice()) return;
 
   event.preventDefault();
-  showMobileDocumentNotice(link.getAttribute("href"), link.dataset.title || link.textContent.trim());
+  missionShowMobileDocumentNotice(link.getAttribute("href"), link.dataset.title || link.textContent.trim());
 });
