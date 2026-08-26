@@ -209,6 +209,147 @@ function renderFaqResource(resource){
   `;
 }
 
+/* =========================================================
+   RECHERCHE PAR MOT-CLÉ DANS LES FAQ (insensible aux accents)
+========================================================= */
+(function injectManagerSearchStyles(){
+  const style = document.createElement("style");
+  style.textContent = `
+    .manager-search-bar{margin:16px 0 24px;display:flex;align-items:center;gap:10px;}
+    .manager-search-input{flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border,#ccc);font-size:14px;background:var(--panel,#fff);color:inherit;}
+    .manager-search-count{font-size:12px;color:var(--muted,#777);white-space:nowrap;}
+    .manager-search-highlight{background:#fff3a3;padding:0 2px;border-radius:2px;}
+  `;
+  document.head.appendChild(style);
+})();
+
+let managerSearchInitialized = false;
+
+// Table des lettres accentuées courantes en français, pour une recherche
+// insensible aux accents (ex : "eleve" retrouve "élève").
+const MANAGER_ACCENT_MAP = {
+  a: "aàâäá", e: "eéèêë", i: "iîïí",
+  o: "oôöó", u: "uùûüú", c: "cç", n: "nñ", y: "yÿý"
+};
+
+function stripAccents(str){
+  return String(str).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+// Construit un motif regex qui matche un terme (déjà sans accent) contre
+// du texte accentué, pour pouvoir surligner "élève" à partir de "eleve".
+function accentInsensitivePattern(term){
+  return term.split("").map(ch => {
+    const lower = ch.toLowerCase();
+    if(MANAGER_ACCENT_MAP[lower]) return `[${MANAGER_ACCENT_MAP[lower]}]`;
+    return ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }).join("");
+}
+
+function highlightText(text, terms){
+  let result = escapeHtml(text);
+  terms.forEach(term => {
+    if(!term) return;
+    result = result.replace(new RegExp(`(${accentInsensitivePattern(term)})`, "gi"),
+      "<mark class=\"manager-search-highlight\">$1</mark>");
+  });
+  return result;
+}
+
+function initManagerSearch(){
+  const searchBar = document.getElementById("managerSearchBar");
+  const input = document.getElementById("managerSearchInput");
+  if(!searchBar || !input) return;
+
+  searchBar.hidden = false;
+
+  document.querySelectorAll(".manager-faq-item").forEach(item => {
+    const summary = item.querySelector("summary");
+    const answer = item.querySelector(".manager-faq-answer");
+    const questionText = summary ? summary.textContent : "";
+    const answerText = answer ? answer.textContent : "";
+    item.dataset.searchText = stripAccents((questionText + " " + answerText).toLowerCase());
+    item.dataset.originalQuestion = questionText;
+  });
+
+  if(managerSearchInitialized) return;
+  managerSearchInitialized = true;
+
+  input.addEventListener("input", () => applyManagerSearch(input.value));
+}
+
+function applyManagerSearch(rawQuery){
+  const countEl = document.getElementById("managerSearchCount");
+  const terms = stripAccents(rawQuery.trim().toLowerCase()).split(/\s+/).filter(Boolean);
+  const faqGroups = document.querySelectorAll("details.manager-faq");
+
+  if(terms.length === 0){
+    document.querySelectorAll(".manager-faq-item").forEach(item => {
+      item.hidden = false;
+      item.open = false;
+      const summary = item.querySelector("summary");
+      if(summary) summary.textContent = item.dataset.originalQuestion || summary.textContent;
+    });
+    faqGroups.forEach(group => { group.hidden = false; group.open = false; });
+    document.querySelectorAll(".manager-resource").forEach(res => { res.hidden = false; });
+    if(countEl) countEl.textContent = "";
+    return;
+  }
+
+  let totalMatches = 0;
+
+  faqGroups.forEach(group => {
+    const items = group.querySelectorAll(".manager-faq-item");
+    let groupHasItemMatch = false;
+
+    items.forEach(item => {
+      const matches = terms.every(term => (item.dataset.searchText || "").includes(term));
+      const summary = item.querySelector("summary");
+
+      if(matches){
+        item.hidden = false;
+        item.open = true;
+        groupHasItemMatch = true;
+        totalMatches++;
+        if(summary) summary.innerHTML = highlightText(item.dataset.originalQuestion, terms);
+      }else{
+        item.hidden = true;
+        item.open = false;
+        if(summary) summary.textContent = item.dataset.originalQuestion || summary.textContent;
+      }
+    });
+
+    const groupTitle = stripAccents(group.querySelector(".manager-resource-title")?.textContent.toLowerCase() || "");
+    const groupDesc = stripAccents(group.querySelector(".manager-resource-description")?.textContent.toLowerCase() || "");
+    const groupTextMatches = terms.every(term => groupTitle.includes(term) || groupDesc.includes(term));
+
+    if(groupHasItemMatch || groupTextMatches){
+      group.hidden = false;
+      group.open = groupHasItemMatch;
+      if(groupTextMatches && !groupHasItemMatch){
+        items.forEach(item => { item.hidden = false; });
+        totalMatches++;
+      }
+    }else{
+      group.hidden = true;
+    }
+  });
+
+  document.querySelectorAll(".manager-resource").forEach(res => {
+    const title = stripAccents(res.querySelector(".manager-resource-title")?.textContent.toLowerCase() || "");
+    const desc = stripAccents(res.querySelector(".manager-resource-description")?.textContent.toLowerCase() || "");
+    const matches = terms.every(term => title.includes(term) || desc.includes(term));
+    res.hidden = !matches;
+    if(matches) totalMatches++;
+  });
+
+  if(countEl){
+    countEl.textContent = totalMatches > 0
+      ? `${totalMatches} résultat${totalMatches > 1 ? "s" : ""}`
+      : "Aucun résultat";
+  }
+}
+
 function renderResources(resourcesArray){
   const container = document.getElementById("managerResources");
   if(!container) return;
@@ -260,6 +401,7 @@ async function unlockManagerResources(){
     error.classList.remove("active");
     gate.hidden = true;
     renderResources(resources);
+    initManagerSearch();
   }else{
     managerFailedAttempts += 1;
 
