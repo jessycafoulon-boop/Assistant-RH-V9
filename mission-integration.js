@@ -459,14 +459,14 @@ function showMissionFinale(){
             Bravo, vous avez aidé Sam à obtenir ses premières clés pour débuter à la Mairie. 🌿
           </div>
           <button type="button" class="mission-restart" id="missionRestart">Rejouer</button>
+          <button type="button" class="mission-quit" id="missionFinaleQuit">← Quitter la mission</button>
         </div>
       </div>
     </div>
   `;
 
   document.getElementById("missionRestart").addEventListener("click", startTreasureHunt);
-  toggleWelcomeMessage(true);
-  toggleSearchbar(true);
+  document.getElementById("missionFinaleQuit").addEventListener("click", quitMission);
 }
 
 function toggleWelcomeMessage(visible){
