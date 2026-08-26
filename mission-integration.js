@@ -166,6 +166,20 @@ function injectMissionStyles(){
     .mission-next{margin-top:14px;padding:10px 18px;border-radius:10px;border:none;
       background:#2f6f4f;color:#fff;font-weight:600;font-size:14px;cursor:pointer;}
 
+    .mission-notif-wrap{text-align:center;padding-top:12px;}
+    .mission-notif-card{display:flex;align-items:center;gap:12px;text-align:left;
+      background:var(--panel,#fff);border-radius:16px;padding:14px 16px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);animation:missionNotifDrop .5s ease;}
+    .mission-notif-icon{width:42px;height:42px;border-radius:12px;background:#2f6f4f;
+      color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;
+      flex-shrink:0;}
+    .mission-notif-title{font-size:14px;font-weight:700;}
+    .mission-notif-sub{font-size:12px;color:var(--muted,#888);margin-top:2px;}
+    @keyframes missionNotifDrop{
+      0%{transform:translateY(-16px);opacity:0;}
+      100%{transform:translateY(0);opacity:1;}
+    }
+
     .mission-quit{display:block;margin:18px auto 0;background:none;border:none;
       color:var(--muted,#888);font-size:12px;text-decoration:underline;cursor:pointer;}
 
@@ -407,6 +421,32 @@ function startTreasureHunt(){
   if(welcome) welcome.classList.add("hidden");
   if(gameContainer) gameContainer.classList.remove("hidden");
 
+  renderMissionNotification();
+}
+
+function renderMissionNotification(){
+  const container = document.getElementById("gameContainer");
+  if(!container) return;
+
+  container.innerHTML = `
+    <div class="mission-wrap mission-notif-wrap">
+      <div class="mission-notif-card" id="missionNotifCard">
+        <div class="mission-notif-icon">💬</div>
+        <div class="mission-notif-text">
+          <div class="mission-notif-title">Nouveau message</div>
+          <div class="mission-notif-sub">Sam vient de t'écrire…</div>
+        </div>
+      </div>
+      <button type="button" class="mission-next" id="missionOpenChatBtn">Lire le message</button>
+      <button type="button" class="mission-quit" id="missionQuit">← Quitter la mission</button>
+    </div>
+  `;
+
+  document.getElementById("missionOpenChatBtn").addEventListener("click", openMissionChat);
+  document.getElementById("missionQuit").addEventListener("click", quitMission);
+}
+
+function openMissionChat(){
   renderMissionShell();
   addMissionBubble("Sam", MISSION_STEPS[0].message);
   renderMissionOptions();
