@@ -711,6 +711,14 @@ function showMobileDocumentNotice(doc){
 
         </p>
 
+        <p class="document-info">
+
+          Après l'avoir consulté, balayez votre
+          écran vers la gauche pour revenir à
+          votre assistant RH.
+
+        </p>
+
         <div class="actions document-actions">
 
           <a
