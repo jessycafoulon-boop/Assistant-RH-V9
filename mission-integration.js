@@ -465,6 +465,12 @@ function showMissionFinale(){
   `;
 
   document.getElementById("missionRestart").addEventListener("click", startTreasureHunt);
+  toggleWelcomeMessage(true);
+}
+
+function toggleWelcomeMessage(visible){
+  const el = document.getElementById("welcomeMessage");
+  if(el) el.style.display = visible ? "" : "none";
 }
 
 function quitMission(){
@@ -472,6 +478,7 @@ function quitMission(){
   const welcome = document.querySelector(".welcome");
   if(gameContainer) gameContainer.classList.add("hidden");
   if(welcome) welcome.classList.remove("hidden");
+  toggleWelcomeMessage(true);
 }
 
 // Nom conservé pour rester compatible avec le bouton existant dans index.html
@@ -484,6 +491,7 @@ function startTreasureHunt(){
   const welcome = document.querySelector(".welcome");
   if(welcome) welcome.classList.add("hidden");
   if(gameContainer) gameContainer.classList.remove("hidden");
+  toggleWelcomeMessage(false);
 
   renderMissionNotification();
 }
