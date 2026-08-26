@@ -1149,7 +1149,7 @@ addMessage(`
   </div>
 
 `);
-
+document.getElementById("chat").lastElementChild.id = "welcomeMessage";
 /* =========================================================
    RESTAURATION DU FEEDBACK
 ========================================================= */
