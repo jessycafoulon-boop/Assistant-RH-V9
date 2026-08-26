@@ -150,7 +150,7 @@ function renderLinkResource(resource){
           ${escapeHtml(resource.description)}
         </div>
       </div>
-      <a class="manager-resource-link" href="${escapeHtml(resource.url)}">
+      <a class="manager-resource-link" href="${escapeHtml(resource.url)}" data-resource-link data-title="${escapeHtml(resource.title)}">
         ${escapeHtml(resource.linkLabel || "Ouvrir")}
       </a>
     </div>
@@ -161,7 +161,7 @@ function renderLinkListResource(resource){
   const links = (resource.links || []).map(link => `
     <div class="manager-resource-sublink">
       <span class="manager-resource-sublink-label">${escapeHtml(link.label)}</span>
-      <a class="manager-resource-link" href="${escapeHtml(link.url)}">
+      <a class="manager-resource-link" href="${escapeHtml(link.url)}" data-resource-link data-title="${escapeHtml(link.label)}">
         ${escapeHtml(link.linkLabel || "Ouvrir")}
       </a>
     </div>
@@ -467,7 +467,7 @@ function renderContactsResults(indexed, rawQuery, resultsEl){
   resultsEl.innerHTML = top.map(({ item }) => `
     <div class="manager-contact-card">
       <div class="manager-contact-name">${escapeHtml(item.icon || "🧭")} ${escapeHtml(item.title || "")}</div>
-      <a class="manager-resource-link" href="${escapeHtml(item.url || "#")}">
+      <a class="manager-resource-link" href="${escapeHtml(item.url || "#")}" data-resource-link data-title="${escapeHtml(item.title || "")}">
         ${escapeHtml(item.linkLabel || "Ouvrir la page intranet")}
       </a>
     </div>
@@ -613,4 +613,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("managerPinSubmit")
     ?.addEventListener("click", unlockManagerResources);
+});
+
+/* =========================================================
+   POP-UP MOBILE AVANT OUVERTURE D'UN DOCUMENT INTRANET
+   (même logique et mêmes classes CSS que dans app.js)
+========================================================= */
+function isMobileDevice(){
+  return window.matchMedia("(max-width:600px)").matches;
+}
+
+function showMobileDocumentNotice(url, title){
+  const existing = document.getElementById("documentModal");
+  if(existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "documentModal";
+
+  modal.innerHTML = `
+    <div class="document-overlay" onclick="closeDocumentModal(event)">
+      <div class="document-modal" role="dialog" aria-modal="true"
+           aria-labelledby="documentModalTitle" onclick="event.stopPropagation()">
+
+        <button class="document-close" type="button" aria-label="Fermer"
+                onclick="closeDocumentModal()">✕</button>
+
+        <div class="document-icon">📄</div>
+
+        <h3 id="documentModalTitle">${escapeHtml(title || "Document RH")}</h3>
+
+        <p>
+          Vous consultez ce document depuis un téléphone.
+          L'accès à certains documents de l'intranet peut nécessiter une reconnexion.
+        </p>
+
+        <p class="document-info">
+          Si l'intranet vous demande vos identifiants, connectez-vous puis
+          revenez dans votre navigateur.
+        </p>
+
+        <p class="document-info">
+          Après l'avoir consulté, balayez votre écran vers la gauche pour revenir
+          à votre assistant RH.
+        </p>
+
+        <div class="actions document-actions">
+          <a class="action primary" href="${escapeHtml(url)}">🔐 Ouvrir le document</a>
+          <button class="action" type="button" onclick="closeDocumentModal()">Retour</button>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function closeDocumentModal(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById("documentModal");
+  if(modal) modal.remove();
+}
+
+document.addEventListener("click", event => {
+  const link = event.target.closest("[data-resource-link]");
+  if(!link) return;
+  if(!isMobileDevice()) return;
+
+  event.preventDefault();
+  showMobileDocumentNotice(link.getAttribute("href"), link.dataset.title || link.textContent.trim());
 });
