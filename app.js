@@ -15,29 +15,21 @@ const CONTACTS = {
   gestionnaireCarriere:{
     label:"Votre gestionnaire carrière",
     email:"rhgestion@mairie-conflans.fr",
-    phone:"A_COMPLETER",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
   },
 
   rhPaie:{
     label:"Secteur Paie",
     email:"rhpaie@mairie-conflans.fr",
-    phone:"0134908879",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/562850b9-0548-4410-8029-832972da3089/viewdetail/"
   },
 
   formation:{
     label:"Secteur Formation",
-    email:"formationrh@mairie-conflans.fr",
-    phone:"0134908903",
+   email: "secteurrhformations@mairie-conflans.fr",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/e7504b01-45da-4aa1-8f7f-45d5f22e4ef0/viewdetail/"
   },
 
-  jessyca:{
-    label:"Jessyca Foulon",
-    email:"jfoulon@mairie-conflans.fr",
-    phone:"0134908903"
-  },
 
   informatique:{
     label:"Service informatique",
@@ -48,7 +40,6 @@ const CONTACTS = {
   prevention:{
     label:"Secteur Prévention",
     email:"A_COMPLETER",
-    phone:"A_COMPLETER",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/14ce95ca-56d5-44f7-a316-f377e4e2960c/viewdetail/"
   }
 
