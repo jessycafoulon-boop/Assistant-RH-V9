@@ -43,6 +43,13 @@ const CONTACTS = {
     phone:"A_COMPLETER"
   },
 
+  intranet:{
+    label:"Secteur Intranet",
+    email:"A_COMPLETER",
+    phone:"A_COMPLETER",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/7d3a9df8-a60b-468f-ae58-e32e601e0fd2/viewdetail/"
+  },
+
   prevention:{
     label:"Secteur Prévention",
     email:"A_COMPLETER",
@@ -309,18 +316,19 @@ const FAQ = [
   },
 
   {
-    id:"intranet",
-    category:"Intranet",
+    id:"logiciels-ressources",
+    category:"Logiciels / Ressources",
     keywords:[
       "intranet","connexion intranet","connecter intranet",
       "mot de passe intranet","identifiant intranet",
       "login intranet","accès intranet","acces intranet",
-      "C.Conflans"
+      "C.Conflans","espace agents","logiciel","logiciels",
+      "ressources","application","applications"
     ],
-    title:"Problème de connexion à l'intranet",
+    title:"Problème de connexion à l'intranet ou à un logiciel",
     answer:
-      "Si vous n'arrivez pas à vous connecter à l'intranet, contactez la personne référente indiquée ci-dessous.",
-    contact:"jessyca"
+      "Si vous n'arrivez pas à vous connecter à l'intranet, à votre Espace Agents ou à un autre logiciel, contactez le secteur Intranet.",
+    contact:"intranet"
   },
 
   {
@@ -426,7 +434,7 @@ const suggestions = [
    
 [
     "🩺 Santé",
-    "Comment modifier mon adresse ?"
+    "J'ai une question sur ma visite médicale"
   ],
    
  [
@@ -574,7 +582,9 @@ function contactHtml(key){
       <div>
         🪪
         <a
-          href="${escapeHtml(contact.ficheUrl)}">
+          href="${escapeHtml(contact.ficheUrl)}"
+          data-resource-link
+          data-title="${escapeHtml(contact.label)}">
 
           Voir la fiche contact
 
@@ -1082,4 +1092,21 @@ try{
 document.addEventListener("keydown", event => {
   if(event.key !== "Escape") return;
   closeDocumentModal();
+});
+
+/* =========================================================
+   OUVERTURE MOBILE DES LIENS DE FICHE CONTACT
+   (interception des liens marqués data-resource-link)
+========================================================= */
+
+document.addEventListener("click", event => {
+  const link = event.target.closest("[data-resource-link]");
+  if(!link) return;
+  if(!isMobileDevice()) return;
+
+  event.preventDefault();
+  showMobileDocumentNotice({
+    url: link.getAttribute("href"),
+    title: link.dataset.title || link.textContent.trim()
+  });
 });
