@@ -387,7 +387,7 @@ function injectMissionStyles(){
    FORMULAIRE DE SATISFACTION (fin de mission)
 ========================================================= */
 const MISSION_GOOGLE_FORM_LIKE_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSd415h4_XtNb2YSoWM3QA1jQfxT4uVZXR_inQP4fa5PF-3znA/viewform?usp=pp_url&entry.1522524480=J'aime+cet+outil";
+  "https://app.questionnaireweb.com/f/457547/4qkpHXZK3xfnnXtSuTcBqm";
 
 function missionFeedbackHtml(){
   return `
