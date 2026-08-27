@@ -1135,9 +1135,8 @@ addMessage(`
     </p>
 
     <p>
-      Et si vous avez envie de tester vos talents
-      d'enquêteur, le bouton
-      <strong>🕵️ Envie de jouer ?</strong>
+      Et si vous avez envie de tester vos connaissances
+      <strong>🕵️ Aider Sam ?</strong>
       vous attend juste au-dessus.
     </p>
 
