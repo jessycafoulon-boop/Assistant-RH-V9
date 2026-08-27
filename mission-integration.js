@@ -1,8 +1,8 @@
 /* =========================================================
    MISSION D'INTÉGRATION — "UN MESSAGE DE SAM"
    ---------------------------------------------------------
-   Parcours découverte de l'assistant RH sous forme de
-   messages SMS : Sam, une nouvelle recrue, envoie une
+   Remplace la chasse au trésor sur photo par un parcours en
+   messages de type SMS : Sam, une nouvelle recrue, envoie une
    question RH à son collègue (le joueur), qui doit choisir la
    bonne réponse parmi 3 propositions. Chaque bonne réponse
    révèle un chiffre du code final.
@@ -491,13 +491,25 @@ function addMissionBubble(author, text){
   bubble.className = "mission-bubble " + (author === "Sam" ? "sam" : "me");
   bubble.innerHTML = `<span class="mission-author">${author === "Sam" ? "💬 Sam" : "Toi"}</span>${escapeMissionHtml(text)}`;
   chat.appendChild(bubble);
-  chat.scrollTop = chat.scrollHeight;
 }
 
 function escapeMissionHtml(value){
   return String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
   }[char]));
+}
+
+// Fait défiler la page pour amener les nouveaux boutons/contenus dans le
+// champ de vision — indispensable sur mobile où rien ne scrolle tout seul.
+function scrollMissionIntoView(){
+  requestAnimationFrame(() => {
+    const target = document.getElementById("missionOptions");
+    if(!target) return;
+    target.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "end"
+    });
+  });
 }
 
 function renderMissionOptions(){
@@ -512,6 +524,8 @@ function renderMissionOptions(){
   el.querySelectorAll(".mission-option").forEach(btn => {
     btn.addEventListener("click", () => handleMissionAnswer(Number(btn.dataset.index)));
   });
+
+  scrollMissionIntoView();
 }
 
 function handleMissionAnswer(index){
@@ -574,6 +588,8 @@ function showMissionResource(step){
   `;
 
   document.getElementById("missionNextBtn").addEventListener("click", advanceMission);
+
+  scrollMissionIntoView();
 }
 
 function advanceMission(){
