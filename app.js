@@ -15,19 +15,22 @@ const CONTACTS = {
   gestionnaireCarriere:{
     label:"Votre gestionnaire carrière",
     email:"rhgestion@mairie-conflans.fr",
-    phone:"A_COMPLETER"
+    phone:"A_COMPLETER",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
   },
 
   rhPaie:{
     label:"Secteur Paie",
     email:"rhpaie@mairie-conflans.fr",
-    phone:"0134908879"
+    phone:"0134908879",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/562850b9-0548-4410-8029-832972da3089/viewdetail/"
   },
 
   formation:{
     label:"Secteur Formation",
     email:"formationrh@mairie-conflans.fr",
-    phone:"0134908903"
+    phone:"0134908903",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/e7504b01-45da-4aa1-8f7f-45d5f22e4ef0/viewdetail/"
   },
 
   jessyca:{
@@ -40,6 +43,13 @@ const CONTACTS = {
     label:"Service informatique",
     email:"A_COMPLETER",
     phone:"A_COMPLETER"
+  },
+
+  prevention:{
+    label:"Secteur Prévention",
+    email:"A_COMPLETER",
+    phone:"A_COMPLETER",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/14ce95ca-56d5-44f7-a316-f377e4e2960c/viewdetail/"
   }
 
 };
@@ -365,6 +375,22 @@ const FAQ = [
   },
 
   {
+    id:"prevention",
+    category:"Prévention",
+    keywords:[
+      "accident du travail","accident de travail","accident de service",
+      "maladie professionnelle","visite médicale","medecine du travail",
+      "médecine du travail","sécurité au travail","securite au travail",
+      "équipement de protection","equipement de protection","EPI",
+      "risques professionnels","document unique","arrêt de travail suite à un accident"
+    ],
+    title:"Question sur la prévention, la sécurité ou un accident du travail",
+    answer:
+      "Pour un accident du travail, une question de sécurité ou une visite médicale, contactez le secteur Prévention.",
+    contact:"prevention"
+  },
+
+  {
     id:"easter",
     category:"Humour",
     keywords:[
@@ -423,6 +449,11 @@ const suggestions = [
   [
     "👩‍🦳 Retraite",
     "Quand pourrai-je partir à la retraite ?"
+  ],
+
+  [
+    "🦺 Prévention",
+    "J'ai eu un accident du travail"
   ]
 
 ];
@@ -531,6 +562,22 @@ function contactHtml(key){
           href="tel:${escapeHtml(cleanPhone)}">
 
           ${escapeHtml(contact.phone)}
+
+        </a>
+      </div>
+    `;
+
+  }
+
+  if(contact.ficheUrl){
+
+    html += `
+      <div>
+        🪪
+        <a
+          href="${escapeHtml(contact.ficheUrl)}">
+
+          Voir la fiche contact
 
         </a>
       </div>
@@ -952,11 +999,11 @@ function answer(question){
 }
 
 /* =========================================================
-   GOOGLE FORMS
+   FORMULAIRE DE SATISFACTION
 ========================================================= */
 
-const GOOGLE_FORM_LIKE_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSd415h4_XtNb2YSoWM3QA1jQfxT4uVZXR_inQP4fa5PF-3znA/viewform?usp=pp_url&entry.1522524480=J'aime+cet+outil";
+const FEEDBACK_FORM_URL =
+  "https://app.questionnaireweb.com/f/457547/4qkpHXZK3xfnnXtSuTcBqm";
 
 function feedbackHtml(){
 
@@ -974,29 +1021,19 @@ function feedbackHtml(){
 
         <br><br>
 
-        N'hésitez pas à nous dire si vous aimez cet outil
-        en appuyant sur le pouce ci-dessous.
+        N'hésitez pas à nous dire ce que vous en pensez.
 
       </div>
 
       <div class="like-area">
 
         <button
-          id="likeButton"
+          id="feedbackButton"
           class="like-button"
           type="button"
-          onclick="sendLike()">
+          onclick="sendFeedback()">
 
-          👍 J'aime cet outil
-
-        </button>
-
-        <button
-          class="dislike-button"
-          type="button"
-          onclick="sendDislike()">
-
-          👎
+          Je donne mon avis
 
         </button>
 
@@ -1015,7 +1052,7 @@ function feedbackHtml(){
 
 }
 
-function sendLike(){
+function sendFeedback(){
 
   try{
 
@@ -1031,7 +1068,7 @@ function sendLike(){
 
   const button =
     document.getElementById(
-      "likeButton"
+      "feedbackButton"
     );
 
   const count =
@@ -1046,7 +1083,7 @@ function sendLike(){
     );
 
     button.textContent =
-      "👍 Merci !";
+      "Merci !";
 
   }
 
@@ -1058,22 +1095,7 @@ function sendLike(){
   }
 
   window.open(
-    GOOGLE_FORM_LIKE_URL,
-    "_blank"
-  );
-
-}
-
-function sendDislike(){
-
-  const url =
-    GOOGLE_FORM_LIKE_URL.replace(
-      "J'aime+cet+outil",
-      "Je+n'aime+pas+encore+cet+outil"
-    );
-
-  window.open(
-    url,
+    FEEDBACK_FORM_URL,
     "_blank"
   );
 
