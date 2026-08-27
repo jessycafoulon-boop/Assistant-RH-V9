@@ -399,10 +399,10 @@ function injectMissionStyles(){
       background:#2f6f4f;color:#fff;font-weight:600;font-size:14px;cursor:pointer;}
 
     .mission-feedback{margin-top:22px;padding:16px;background:var(--panel,#f8f8f6);
-      border-radius:14px;text-align:left;}
+      border-radius:14px;text-align:center;}
     .mission-feedback-title{font-weight:700;font-size:14px;margin-bottom:6px;}
     .mission-feedback-text{font-size:13px;color:var(--muted,#777);line-height:1.5;}
-    .mission-like-area{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+    .mission-like-area{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
     .mission-like-button{border:1.5px solid var(--border,#ddd);
       background:var(--panel,#fff);border-radius:12px;padding:9px 14px;cursor:pointer;
       font-weight:600;font-size:13px;color:inherit;}
@@ -506,13 +506,23 @@ function escapeMissionHtml(value){
 
 // Fait défiler la page pour amener les nouveaux boutons/contenus dans le
 // champ de vision — indispensable sur mobile où rien ne scrolle tout seul.
+// Ajoute une marge sous le contenu pour ne pas le coller au bord de l'écran.
+const MISSION_SCROLL_BOTTOM_MARGIN = 32;
+
 function scrollMissionIntoView(){
   requestAnimationFrame(() => {
     const target = document.getElementById("missionOptions");
     if(!target) return;
-    target.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-      block: "end"
+
+    const rect = target.getBoundingClientRect();
+    const targetBottomInPage = rect.bottom + window.scrollY + MISSION_SCROLL_BOTTOM_MARGIN;
+    const viewportBottomInPage = window.scrollY + window.innerHeight;
+
+    if(targetBottomInPage <= viewportBottomInPage) return; // déjà bien visible
+
+    window.scrollTo({
+      top: targetBottomInPage - window.innerHeight,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
     });
   });
 }
