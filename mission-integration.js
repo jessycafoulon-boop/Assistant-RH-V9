@@ -729,7 +729,7 @@ function missionShowMobileDocumentNotice(url, title){
 
         <p>
           Vous consultez ce document depuis un téléphone.
-          L'accès à certains documents de l'intranet peut nécessiter une reconnexion.
+          L'accès à certains documents ou pages de l'intranet peut nécessiter une reconnexion.
         </p>
 
         <p class="document-info">
@@ -738,7 +738,7 @@ function missionShowMobileDocumentNotice(url, title){
         </p>
 
         <p class="document-info">
-          Après l'avoir consulté, balayez votre écran vers la gauche pour revenir
+          Après avoir consulté le lien, balayez votre écran vers la gauche pour revenir
           à votre assistant RH.
         </p>
 
