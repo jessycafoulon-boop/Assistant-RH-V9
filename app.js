@@ -1136,7 +1136,7 @@ addMessage(`
 
     <p>
       Et si vous avez envie de tester vos connaissances,
-      <strong>cliquez su🕵️ Aider Sam ?</strong>
+      <strong>cliquez sur 🕵️ Aider Sam ?</strong>
     </p>
 
   </div>
