@@ -738,9 +738,9 @@ function showMobileDocumentNotice(doc){
         <p>
           Vous consultez ce document depuis
           un téléphone.
-          L'accès à certains documents de
-          l'intranet peut nécessiter une
-          reconnexion.
+          L'accès à certains documents ou pages de
+          l'intranet peut nécessiter une nouvelle
+          connexion.
         </p>
 
         <p class="document-info">
@@ -753,7 +753,7 @@ function showMobileDocumentNotice(doc){
 
         <p class="document-info">
 
-          Après l'avoir consulté, balayez votre
+          Après consulté le lien, balayez votre
           écran vers la gauche pour revenir à
           votre assistant RH.
 
