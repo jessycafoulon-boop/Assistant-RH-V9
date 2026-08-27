@@ -401,7 +401,7 @@ function missionFeedbackHtml(){
         <button id="missionFeedbackButton" class="mission-like-button" type="button" onclick="sendMissionFeedback()">
           Je donne mon avis
         </button>
-        <span class="mission-like-count" id="missionLikeCount">!</span>
+        <span class="mission-like-count" id="missionLikeCount"></span>
       </div>
     </div>
   `;
