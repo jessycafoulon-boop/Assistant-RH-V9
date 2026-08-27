@@ -417,15 +417,20 @@ const suggestions = [
     "🗂️ Dossier administratif",
     "Comment modifier mon adresse ?"
   ],
+   
+[
+    "🩺 Santé",
+    "Comment modifier mon adresse ?"
+  ],
+   
+ [
+    "🦺 Prévention",
+    "J'ai eu un accident du travail"
+  ]
 
   [
     "🎓 Formation",
     "Je souhaite faire une formation"
-  ],
-
-  [
-    "💻 Intranet",
-    "Je n'arrive pas à me connecter à l'intranet"
   ],
 
   [
@@ -434,8 +439,8 @@ const suggestions = [
   ],
 
   [
-    "📑 Documents",
-    "J'ai besoin d'une attestation"
+    "💻 Logiciels",
+    "J'ai besoin d'accéder à mon Espace Agents "
   ],
 
   [
@@ -443,11 +448,7 @@ const suggestions = [
     "Quand pourrai-je partir à la retraite ?"
   ],
 
-  [
-    "🦺 Prévention",
-    "J'ai eu un accident du travail"
-  ]
-
+ 
 ];
 
 /* =========================================================
