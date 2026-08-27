@@ -118,6 +118,106 @@ const MISSION_STEPS = [
 let missionCurrentStep = 0;
 
 /* =========================================================
+   MUSIQUE D'AMBIANCE (lecteur YouTube invisible)
+   Utilise l'API officielle YouTube IFrame Player — le player
+   reste caché (1x1px hors-écran), seul le son est audible.
+========================================================= */
+const MISSION_MUSIC_VIDEO_ID = "piJG3oOXKVo";
+let missionYouTubePlayer = null;
+let missionYouTubeApiLoading = false;
+
+function loadMissionYouTubeApi(callback){
+  if(window.YT && window.YT.Player){
+    callback();
+    return;
+  }
+  const previousCallback = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = function(){
+    if(typeof previousCallback === "function") previousCallback();
+    callback();
+  };
+  if(missionYouTubeApiLoading) return;
+  missionYouTubeApiLoading = true;
+  const tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+}
+
+function ensureMissionMusicContainer(){
+  let holder = document.getElementById("missionMusicPlayer");
+  if(holder) return holder;
+  holder = document.createElement("div");
+  holder.id = "missionMusicPlayer";
+  holder.style.cssText = "position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;left:-9999px;top:-9999px;";
+  document.body.appendChild(holder);
+  return holder;
+}
+
+function startMissionMusic(){
+  ensureMissionMusicContainer();
+  loadMissionYouTubeApi(() => {
+    if(missionYouTubePlayer){
+      try{
+        missionYouTubePlayer.seekTo(0);
+        missionYouTubePlayer.playVideo();
+      }catch(e){}
+      return;
+    }
+    missionYouTubePlayer = new YT.Player("missionMusicPlayer", {
+      height: "1",
+      width: "1",
+      videoId: MISSION_MUSIC_VIDEO_ID,
+      playerVars: {
+        autoplay: 1,
+        loop: 1,
+        playlist: MISSION_MUSIC_VIDEO_ID,
+        controls: 0,
+        disablekb: 1,
+        modestbranding: 1
+      },
+      events: {
+        onReady: (event) => {
+          event.target.setVolume(50);
+          event.target.playVideo();
+        }
+      }
+    });
+  });
+}
+
+function stopMissionMusic(){
+  if(missionYouTubePlayer && typeof missionYouTubePlayer.stopVideo === "function"){
+    try{ missionYouTubePlayer.stopVideo(); }catch(e){}
+  }
+}
+
+/* =========================================================
+   BIP DE NOTIFICATION (réception d'un message de Sam)
+   Son synthétique via Web Audio API, aucun fichier requis.
+========================================================= */
+function playMissionNotificationBeep(){
+  try{
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+    oscillator.type = "sine";
+    oscillator.frequency.value = 880;
+    gain.gain.setValueAtTime(0.001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.32);
+    oscillator.onended = () => ctx.close();
+  }catch(e){
+    // Le navigateur peut bloquer l'audio sans interaction préalable : on ignore silencieusement.
+  }
+}
+
+/* =========================================================
    SCINTILLEMENT DU BOUTON DE LANCEMENT
    Actif tant que le joueur n'a pas cliqué pour démarrer.
 ========================================================= */
@@ -393,8 +493,10 @@ function advanceMission(){
   if(missionCurrentStep < MISSION_STEPS.length){
     addMissionBubble("Sam", MISSION_STEPS[missionCurrentStep].message);
     renderMissionOptions();
+    playMissionNotificationBeep();
   }else{
     addMissionBubble("Sam", "Génial, merci pour ton aide sur tout ça ! 🙌");
+    playMissionNotificationBeep();
     const optionsEl = document.getElementById("missionOptions");
     optionsEl.innerHTML = `
       <button type="button" class="mission-next" id="missionSeeFinaleBtn">Voir la suite</button>
@@ -486,6 +588,7 @@ function quitMission(){
   if(welcome) welcome.classList.remove("hidden");
   toggleWelcomeMessage(true);
   toggleSearchbar(true);
+  stopMissionMusic();
 }
 
 // Nom conservé pour rester compatible avec le bouton existant dans index.html
@@ -528,6 +631,9 @@ function renderMissionNotification(){
 
   document.getElementById("missionOpenChatBtn").addEventListener("click", openMissionChat);
   document.getElementById("missionQuit").addEventListener("click", quitMission);
+
+  playMissionNotificationBeep();
+  startMissionMusic();
 }
 
 function openMissionChat(){
