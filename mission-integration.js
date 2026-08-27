@@ -211,10 +211,15 @@ function resumeMissionMusicIfNeeded(){
 }
 
 document.addEventListener("visibilitychange", () => {
-  if(!document.hidden) resumeMissionMusicIfNeeded();
+  if(document.hidden) return;
+  resumeMissionMusicIfNeeded();
+  if(missionMusicActive) scrollMissionIntoView();
 });
 
-window.addEventListener("focus", resumeMissionMusicIfNeeded);
+window.addEventListener("focus", () => {
+  resumeMissionMusicIfNeeded();
+  if(missionMusicActive) scrollMissionIntoView();
+});
 
 /* =========================================================
    BIP DE NOTIFICATION (réception d'un message de Sam)
