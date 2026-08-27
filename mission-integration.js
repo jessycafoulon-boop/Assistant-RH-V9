@@ -89,8 +89,6 @@ const MISSION_STEPS = [
       linkLabel: "Voir le bulletin",
       contact: {
         label: "Secteur Paie",
-        email: "rhpaie@mairie-conflans.fr",
-        phone: "01 34 90 88 79",
         url: "https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/14225e91-d939-4f73-865d-ddb76510eecc/562850b9-0548-4410-8029-832972da3089/viewdetail/"
       }
     }
@@ -586,8 +584,8 @@ function showMissionResource(step){
     ${step.resource.contact ? `
       <div class="mission-contact">
         <div class="mission-contact-label">📞 ${escapeMissionHtml(step.resource.contact.label)}</div>
-        <div class="mission-contact-line">${escapeMissionHtml(step.resource.contact.phone)}</div>
-        <div class="mission-contact-line"><a href="mailto:${escapeMissionHtml(step.resource.contact.email)}">${escapeMissionHtml(step.resource.contact.email)}</a></div>
+        ${step.resource.contact.phone ? `<div class="mission-contact-line">${escapeMissionHtml(step.resource.contact.phone)}</div>` : ""}
+        ${step.resource.contact.email ? `<div class="mission-contact-line"><a href="mailto:${escapeMissionHtml(step.resource.contact.email)}">${escapeMissionHtml(step.resource.contact.email)}</a></div>` : ""}
         ${step.resource.contact.url ? `
           <div class="mission-contact-line">
             <a href="${escapeMissionHtml(step.resource.contact.url)}" data-resource-link data-title="${escapeMissionHtml(step.resource.contact.label)}" target="_blank" rel="noopener noreferrer">
