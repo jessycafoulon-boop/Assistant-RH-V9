@@ -426,7 +426,7 @@ const suggestions = [
  [
     "🦺 Prévention",
     "J'ai eu un accident du travail"
-  ]
+  ],
 
   [
     "🎓 Formation",
