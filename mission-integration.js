@@ -373,10 +373,10 @@ function injectMissionStyles(){
     .mission-feedback-title{font-weight:700;font-size:14px;margin-bottom:6px;}
     .mission-feedback-text{font-size:13px;color:var(--muted,#777);line-height:1.5;}
     .mission-like-area{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
-    .mission-like-button,.mission-dislike-button{border:1.5px solid var(--border,#ddd);
+    .mission-like-button{border:1.5px solid var(--border,#ddd);
       background:var(--panel,#fff);border-radius:12px;padding:9px 14px;cursor:pointer;
       font-weight:600;font-size:13px;color:inherit;}
-    .mission-like-button:hover,.mission-dislike-button:hover{border-color:#2f6f4f;}
+    .mission-like-button:hover{border-color:#2f6f4f;}
     .mission-like-button.liked{background:rgba(47,111,79,.1);border-color:#2f6f4f;color:#2f6f4f;}
     .mission-like-count{font-size:12px;color:var(--muted,#888);}
   `;
@@ -386,7 +386,7 @@ function injectMissionStyles(){
 /* =========================================================
    FORMULAIRE DE SATISFACTION (fin de mission)
 ========================================================= */
-const MISSION_GOOGLE_FORM_LIKE_URL =
+const MISSION_GOOGLE_FORM_URL =
   "https://app.questionnaireweb.com/f/457547/4qkpHXZK3xfnnXtSuTcBqm";
 
 function missionFeedbackHtml(){
@@ -395,14 +395,11 @@ function missionFeedbackHtml(){
       <div class="mission-feedback-title">Votre avis nous intéresse ❤️</div>
       <div class="mission-feedback-text">
         Maintenant, vous savez vous servir de votre Assistant RH ! 🎉
-        N'hésitez pas à nous dire si vous aimez cet outil en appuyant sur le pouce ci-dessous.
+        N'hésitez pas à nous dire ce que vous en pensez.
       </div>
       <div class="mission-like-area">
-        <button id="missionLikeButton" class="mission-like-button" type="button" onclick="sendMissionLike()">
-          👍 J'aime cet outil
-        </button>
-        <button class="mission-dislike-button" type="button" onclick="sendMissionDislike()">
-          👎
+        <button id="missionFeedbackButton" class="mission-like-button" type="button" onclick="sendMissionFeedback()">
+          Je donne mon avis
         </button>
         <span class="mission-like-count" id="missionLikeCount">Votre avis compte !</span>
       </div>
@@ -410,33 +407,25 @@ function missionFeedbackHtml(){
   `;
 }
 
-function sendMissionLike(){
+function sendMissionFeedback(){
   try{
     localStorage.setItem("assistantRH_liked", "true");
   }catch(error){
     // LocalStorage indisponible : on continue quand même.
   }
 
-  const button = document.getElementById("missionLikeButton");
+  const button = document.getElementById("missionFeedbackButton");
   const count = document.getElementById("missionLikeCount");
 
   if(button){
     button.classList.add("liked");
-    button.textContent = "👍 Merci !";
+    button.textContent = "Merci !";
   }
   if(count){
     count.textContent = "Merci pour votre avis ❤️";
   }
 
-  window.open(MISSION_GOOGLE_FORM_LIKE_URL, "_blank");
-}
-
-function sendMissionDislike(){
-  const url = MISSION_GOOGLE_FORM_LIKE_URL.replace(
-    "J'aime+cet+outil",
-    "Je+n'aime+pas+encore+cet+outil"
-  );
-  window.open(url, "_blank");
+  window.open(MISSION_GOOGLE_FORM_URL, "_blank");
 }
 
 function renderMissionShell(){
