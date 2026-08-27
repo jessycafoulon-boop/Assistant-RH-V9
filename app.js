@@ -12,7 +12,13 @@ const ORG_NAME =
 
 const CONTACTS = {
 
-  gestionnaireCarriere:{
+    emploicompetences:{
+    label:"Secteur Emploi et développement des compténces",
+    email: " A compléter",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/e7504b01-45da-4aa1-8f7f-45d5f22e4ef0/viewdetail/"
+  },
+   
+    gestionnaireCarriere:{
     label:"Secteur Gestion des carrières",
     email:"rhgestion@mairie-conflans.fr",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
