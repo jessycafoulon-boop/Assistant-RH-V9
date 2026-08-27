@@ -89,8 +89,7 @@ const MISSION_STEPS = [
       linkLabel: "Voir le bulletin",
       contact: {
         label: "Secteur Paie",
-        email: "rhpaie@mairie-conflans.fr",
-        phone: "01 34 90 88 79"
+        url: "https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/14225e91-d939-4f73-865d-ddb76510eecc/562850b9-0548-4410-8029-832972da3089/viewdetail/"
       }
     }
   },
@@ -522,7 +521,7 @@ function showMissionResource(step){
         <div class="mission-resource-title">${escapeMissionHtml(step.resource.title)}</div>
         ${step.resource.note ? `<div class="mission-resource-sub">${escapeMissionHtml(step.resource.note)}</div>` : ""}
       </div>
-      <a class="mission-resource-link" href="${escapeMissionHtml(step.resource.url)}" data-resource-link data-title="${escapeMissionHtml(step.resource.title)}">
+      <a class="mission-resource-link" href="${escapeMissionHtml(step.resource.url)}" data-resource-link data-title="${escapeMissionHtml(step.resource.title)}" target="_blank" rel="noopener noreferrer">
         ${escapeMissionHtml(step.resource.linkLabel || "Voir")}
       </a>
     </div>
@@ -531,6 +530,13 @@ function showMissionResource(step){
         <div class="mission-contact-label">📞 ${escapeMissionHtml(step.resource.contact.label)}</div>
         <div class="mission-contact-line">${escapeMissionHtml(step.resource.contact.phone)}</div>
         <div class="mission-contact-line"><a href="mailto:${escapeMissionHtml(step.resource.contact.email)}">${escapeMissionHtml(step.resource.contact.email)}</a></div>
+        ${step.resource.contact.url ? `
+          <div class="mission-contact-line">
+            <a href="${escapeMissionHtml(step.resource.contact.url)}" data-resource-link data-title="${escapeMissionHtml(step.resource.contact.label)}" target="_blank" rel="noopener noreferrer">
+              Voir la fiche contact
+            </a>
+          </div>
+        ` : ""}
       </div>
     ` : ""}
   ` : "";
@@ -729,7 +735,7 @@ function missionShowMobileDocumentNotice(url, title){
 
         <p>
           Vous consultez ce document depuis un téléphone.
-          L'accès à certains documents ou pages de l'intranet peut nécessiter une reconnexion.
+          L'accès à certains documents de l'intranet peut nécessiter une reconnexion.
         </p>
 
         <p class="document-info">
@@ -738,12 +744,12 @@ function missionShowMobileDocumentNotice(url, title){
         </p>
 
         <p class="document-info">
-          Après avoir consulté le lien, balayez votre écran vers la gauche pour revenir
+          Après l'avoir consulté, balayez votre écran vers la gauche pour revenir
           à votre assistant RH.
         </p>
 
         <div class="actions document-actions">
-          <a class="action primary" href="${escapeMissionHtml(url)}">🔐 Ouvrir le document</a>
+          <a class="action primary" href="${escapeMissionHtml(url)}" target="_blank" rel="noopener noreferrer">🔐 Ouvrir le document</a>
           <button class="action" type="button" onclick="missionCloseDocumentModal()">Retour</button>
         </div>
 
