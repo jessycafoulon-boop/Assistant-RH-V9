@@ -1,8 +1,8 @@
 /* =========================================================
    MISSION D'INTÉGRATION — "UN MESSAGE DE SAM"
    ---------------------------------------------------------
-   Remplace la chasse au trésor sur photo par un parcours en
-   messages de type SMS : Sam, une nouvelle recrue, envoie une
+   Parcours découverte de l'assistant RH sous forme de
+   messages SMS : Sam, une nouvelle recrue, envoie une
    question RH à son collègue (le joueur), qui doit choisir la
    bonne réponse parmi 3 propositions. Chaque bonne réponse
    révèle un chiffre du code final.
