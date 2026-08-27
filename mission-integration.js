@@ -403,6 +403,9 @@ function injectMissionStyles(){
     .mission-feedback-title{font-weight:700;font-size:14px;margin-bottom:6px;}
     .mission-feedback-text{font-size:13px;color:var(--muted,#777);line-height:1.5;}
     .mission-like-area{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+    @media (max-width:600px){
+      .mission-like-area{flex-direction:column;align-items:center;}
+    }
     .mission-like-button{border:1.5px solid var(--border,#ddd);
       background:var(--panel,#fff);border-radius:12px;padding:9px 14px;cursor:pointer;
       font-weight:600;font-size:13px;color:inherit;}
