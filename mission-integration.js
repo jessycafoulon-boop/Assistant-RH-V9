@@ -89,6 +89,8 @@ const MISSION_STEPS = [
       linkLabel: "Voir le bulletin",
       contact: {
         label: "Secteur Paie",
+        email: "rhpaie@mairie-conflans.fr",
+        phone: "01 34 90 88 79",
         url: "https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/14225e91-d939-4f73-865d-ddb76510eecc/562850b9-0548-4410-8029-832972da3089/viewdetail/"
       }
     }
@@ -124,6 +126,7 @@ let missionCurrentStep = 0;
 const MISSION_MUSIC_VIDEO_ID = "piJG3oOXKVo";
 let missionYouTubePlayer = null;
 let missionYouTubeApiLoading = false;
+let missionMusicActive = false; // suit l'intention : la musique doit-elle jouer ?
 
 function loadMissionYouTubeApi(callback){
   if(window.YT && window.YT.Player){
@@ -153,6 +156,7 @@ function ensureMissionMusicContainer(){
 }
 
 function startMissionMusic(){
+  missionMusicActive = true;
   ensureMissionMusicContainer();
   loadMissionYouTubeApi(() => {
     if(missionYouTubePlayer){
@@ -185,10 +189,32 @@ function startMissionMusic(){
 }
 
 function stopMissionMusic(){
+  missionMusicActive = false;
   if(missionYouTubePlayer && typeof missionYouTubePlayer.stopVideo === "function"){
     try{ missionYouTubePlayer.stopVideo(); }catch(e){}
   }
 }
+
+// Certains navigateurs (surtout mobile) suspendent la lecture audio/vidéo
+// d'un onglet passé en arrière-plan (par ex. quand un lien s'ouvre dans un
+// nouvel onglet). On relance la musique dès que l'onglet redevient actif,
+// si elle était censée jouer.
+function resumeMissionMusicIfNeeded(){
+  if(!missionMusicActive || !missionYouTubePlayer) return;
+  try{
+    if(typeof missionYouTubePlayer.getPlayerState === "function"){
+      const PLAYING = 1;
+      if(missionYouTubePlayer.getPlayerState() === PLAYING) return;
+    }
+    missionYouTubePlayer.playVideo();
+  }catch(e){}
+}
+
+document.addEventListener("visibilitychange", () => {
+  if(!document.hidden) resumeMissionMusicIfNeeded();
+});
+
+window.addEventListener("focus", resumeMissionMusicIfNeeded);
 
 /* =========================================================
    BIP DE NOTIFICATION (réception d'un message de Sam)
