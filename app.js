@@ -439,7 +439,7 @@ const suggestions = [
   ],
 
   [
-    "💻 Logiciels",
+    "💻 Logiciels / Ressources",
     "J'ai besoin d'accéder à mon Espace Agents "
   ],
 
