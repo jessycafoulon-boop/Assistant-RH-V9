@@ -13,7 +13,7 @@ const ORG_NAME =
 const CONTACTS = {
 
     emploicompetences:{
-    label:"Secteur Emploi et développement des compténces",
+    label:"Secteur Emploi et développement des compétences",
     email: " A compléter",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/e7504b01-45da-4aa1-8f7f-45d5f22e4ef0/viewdetail/"
   },
