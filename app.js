@@ -23,11 +23,15 @@ const CONTACTS = {
     email:"rhgestion@mairie-conflans.fr",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
   },
+      sante:{
+    label:"Secteur Santé",
+    email:"rhgestion@mairie-conflans.fr",
+    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
+  },
 
   rhPaie:{
     label:"Secteur Paie",
     email:"rhpaie@mairie-conflans.fr",
-    phone:"0134908879",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/562850b9-0548-4410-8029-832972da3089/viewdetail/"
   },
 
@@ -261,8 +265,20 @@ const FAQ = [
     title:"Question sur votre dossier administratif ou votre carrière",
     answer:
       "PVous avez une question concernant votre dossier administratif ou vous souhaitez signaler un changement de situation, contactez votre gestionnaire carrière.",
-    contact:"gestionnaireCarrière",
+    contact:"gestionnaireCarriere",
     documents:["Gestcarr"]
+  },
+{
+    id:"sante",
+    category:"Santé",
+    keywords:[
+      "maladie professionnelle","visite médicale","medecine du travail",
+      "médecine du travail","arrêt de travail suite à un accident"
+    ],
+    title:"Question sur votre santé",
+    answer:
+      "Pour une question concernant votre sant ou une visite médicale, contactez votre gestionnare santé.",
+    contact:"sante"
   },
 
   {
