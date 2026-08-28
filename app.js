@@ -13,7 +13,7 @@ const ORG_NAME =
 const CONTACTS = {
 
     emploicompetences:{
-    label:"Secteur Emploi et développement des compténces",
+    label:"Secteur Emploi et développement des compétences",
     email: " A compléter",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/e7504b01-45da-4aa1-8f7f-45d5f22e4ef0/viewdetail/"
   },
@@ -39,20 +39,17 @@ const CONTACTS = {
   informatique:{
     label:"Service informatique",
     email:"A_COMPLETER",
-    phone:"A_COMPLETER"
   },
 
   intranet:{
     label:"Secteur Intranet",
     email:"A_COMPLETER",
-    phone:"A_COMPLETER",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/7d3a9df8-a60b-468f-ae58-e32e601e0fd2/viewdetail/"
   },
 
   prevention:{
     label:"Secteur Prévention",
     email:"A_COMPLETER",
-    phone:"A_COMPLETER",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/14ce95ca-56d5-44f7-a316-f377e4e2960c/viewdetail/"
   },
 
