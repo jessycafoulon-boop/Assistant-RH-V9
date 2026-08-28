@@ -12,24 +12,19 @@ const ORG_NAME =
 
 const CONTACTS = {
 
-emploicompetences:{
-    label:"Secteur Emploi et développement des compétences",
+    emploicompetences:{
+    label:"Secteur Emploi et développement des compténces",
     email: " A compléter",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/e7504b01-45da-4aa1-8f7f-45d5f22e4ef0/viewdetail/"
   },
    
-gestionnaireCarriere:{
+    gestionnaireCarriere:{
     label:"Secteur Gestion des carrières",
     email:"rhgestion@mairie-conflans.fr",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
   },
-sante:{
-    label:"Secteur Santé",
-    email:"rhgestion@mairie-conflans.fr",
-    ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
-  },
 
- rhPaie:{
+  rhPaie:{
     label:"Secteur Paie",
     email:"rhpaie@mairie-conflans.fr",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/562850b9-0548-4410-8029-832972da3089/viewdetail/"
@@ -50,15 +45,28 @@ sante:{
   intranet:{
     label:"Secteur Intranet",
     email:"A_COMPLETER",
+    phone:"A_COMPLETER",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/7d3a9df8-a60b-468f-ae58-e32e601e0fd2/viewdetail/"
   },
 
   prevention:{
     label:"Secteur Prévention",
     email:"A_COMPLETER",
+    phone:"A_COMPLETER",
     ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/14ce95ca-56d5-44f7-a316-f377e4e2960c/viewdetail/"
-  }
+  },
 
+  sante:{
+    label:"Santé",
+    email:"A_COMPLETER",
+   ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
+  },
+   
+ arrettravail:{
+    label:"Santé",
+    email:"arretdetravail@mairie-conflans.fr",
+   ficheUrl:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/3d4b5cc5-67cf-4b73-aead-3c3c223bd917/viewdetail/"
+  }
 };
 
 /* =========================================================
@@ -111,7 +119,16 @@ const DOCUMENTS = {
     format:"Page intranet",
     url:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/658dd1e2-3072-45ff-9cc0-61b9913de021/viewdetail/"
   },
-
+   
+ transmissionarrettravail:{
+    title:"Comment transmettre votre arrêt de travail au service RH",
+    description:
+      "Nouvelle procédure pour la transmission de vos arrêts de travail",
+    type:"page",
+    format:"Page intranet",
+    url:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/b9ead47b-5319-4fcc-8093-844c8fd66173/viewdetail/"
+  },
+   
   versementsalaire:{
     title:"Calendrier de versement des salaires 2026",
     description:
@@ -258,25 +275,17 @@ const FAQ = [
        "temps de travail","temps complet","temps non complet","temps partiel",
        "cadre d'emplois","grade","échelon",
        "affectation","mutation","résidence administrative",
-       "carrière", "avancement d'échelon","avancement de grade","promotion interne"
+       "avancement d'échelon","avancement de grade","promotion interne",
+       "adresse","modifier mon adresse","changement d'adresse",
+       "changer d'adresse","mise à jour adresse","déménagement agent",
+       "état civil","changement d'état civil","changement de nom",
+       "changement de situation familiale"
     ],
     title:"Question sur votre dossier administratif ou votre carrière",
     answer:
-      "PVous avez une question concernant votre dossier administratif ou vous souhaitez signaler un changement de situation, contactez votre gestionnaire carrière.",
+      "Vous avez une question concernant votre dossier administratif ou vous souhaitez signaler un changement de situation (adresse, état civil...), contactez votre gestionnaire carrière.",
     contact:"gestionnaireCarriere",
     documents:["Gestcarr"]
-  },
-{
-    id:"sante",
-    category:"Santé",
-    keywords:[
-      "maladie professionnelle","visite médicale","medecine du travail",
-      "médecine du travail","arrêt de travail suite à un accident"
-    ],
-    title:"Question sur votre santé",
-    answer:
-      "Pour une question concernant votre sant ou une visite médicale, contactez votre gestionnare santé.",
-    contact:"sante"
   },
 
   {
@@ -414,18 +423,45 @@ const FAQ = [
   },
 
   {
+    id:"sante",
+    category:"Santé",
+    keywords:[
+      "visite médicale","visite medicale","medecine du travail",
+      "médecine du travail","médecin du travail","medecin du travail",
+      "aptitude","inaptitude","reclassement",
+      "congé maladie","congé longue maladie",
+      "congé longue durée","mi-temps thérapeutique",
+      "mi temps therapeutique","santé au travail"
+    ],
+    title:"Question sur votre santé au travail",
+    answer:
+      "Pour une question sur votre visite médicale, votre aptitude ou un suivi lié à la médecine du travail, contactez votre gestionnaire Santé.",
+    contact:"sante"
+  },
+   {
+    id:"arrêttravail",
+    category:"Santé",
+    keywords:[
+      "arrêt","arret","arrêt de travail","arret de travail"
+    ],
+    title:"Question sur votre arrêt de travail",
+    answer:
+      "PVous souhaitez transmettre votre arrêt de travail ou vous avez une question, contactez votre gestionnaire Santé.",
+    contact:"arrettravail"
+  },
+
+  {
     id:"prevention",
     category:"Prévention",
     keywords:[
       "accident du travail","accident de travail","accident de service",
-      "maladie professionnelle","visite médicale","medecine du travail",
-      "médecine du travail","sécurité au travail","securite au travail",
+      "maladie professionnelle","sécurité au travail","securite au travail",
       "équipement de protection","equipement de protection","EPI",
-      "risques professionnels","document unique","arrêt de travail suite à un accident"
+      "risques professionnels","document unique"
     ],
     title:"Question sur la prévention, la sécurité ou un accident du travail",
     answer:
-      "Pour un accident du travail, une question de sécurité ou une visite médicale, contactez le secteur Prévention.",
+      "Pour un accident du travail, une question de sécurité ou un équipement de protection, contactez le secteur Prévention.",
     contact:"prevention"
   },
 
