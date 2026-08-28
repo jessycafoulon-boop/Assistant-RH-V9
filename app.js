@@ -878,8 +878,7 @@ function showMobileDocumentNotice(doc){
 
   document.body.appendChild(modal);
 
-  document.body.style.overflow =
-    "hidden";
+  lockBodyScroll();
 
 }
 
@@ -905,8 +904,50 @@ function closeDocumentModal(event){
     modal.remove();
   }
 
+  unlockBodyScroll();
+
+}
+
+/* =========================================================
+   VERROUILLAGE / DEVERROUILLAGE DU SCROLL
+   (html + body, pour compatibilité mobile large)
+========================================================= */
+
+function lockBodyScroll(){
+
+  document.documentElement.style.overflow =
+    "hidden";
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+function unlockBodyScroll(){
+
+  document.documentElement.style.overflow =
+    "";
+
   document.body.style.overflow =
     "";
+
+}
+
+/* =========================================================
+   FILET DE SECURITE : si la modale n'existe plus mais que
+   le scroll est resté verrouillé, on le débloque
+========================================================= */
+
+function ensureScrollUnlocked(){
+
+  const modalStillOpen =
+    document.getElementById(
+      "documentModal"
+    );
+
+  if(!modalStillOpen){
+    unlockBodyScroll();
+  }
 
 }
 
@@ -1175,9 +1216,17 @@ document.addEventListener("keydown", event => {
    scroll verrouillé après un retour arrière sur mobile
 ========================================================= */
 
-window.addEventListener("pageshow", event => {
-  if(!event.persisted) return;
-  closeDocumentModal();
+window.addEventListener("pageshow", () => {
+  ensureScrollUnlocked();
+});
+
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState !== "visible") return;
+  ensureScrollUnlocked();
+});
+
+window.addEventListener("focus", () => {
+  ensureScrollUnlocked();
 });
 
 /* =========================================================
