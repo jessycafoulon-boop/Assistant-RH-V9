@@ -446,8 +446,9 @@ const FAQ = [
     ],
     title:"Question sur votre arrêt de travail",
     answer:
-      "PVous souhaitez transmettre votre arrêt de travail ou vous avez une question, contactez votre gestionnaire Santé.",
-    contact:"arrettravail"
+      "Vous souhaitez transmettre votre arrêt de travail ou vous avez une question, contactez votre gestionnaire Santé.",
+    contact:"arrettravail",
+    documents:["transmissionarrettravail"]
   },
 
   {
@@ -652,6 +653,8 @@ function contactHtml(key){
         🪪
         <a
           href="${escapeHtml(contact.ficheUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
           data-resource-link
           data-title="${escapeHtml(contact.label)}">
 
@@ -762,8 +765,11 @@ function openDocumentByKey(key){
     return;
   }
 
-  window.location.href =
-    doc.url;
+  window.open(
+    doc.url,
+    "_blank",
+    "noopener,noreferrer"
+  );
 
 }
 
@@ -1160,6 +1166,17 @@ try{
 
 document.addEventListener("keydown", event => {
   if(event.key !== "Escape") return;
+  closeDocumentModal();
+});
+
+/* =========================================================
+   RESTAURATION DEPUIS LE CACHE DE NAVIGATION (bfcache)
+   Evite de rester bloqué avec la modale ouverte et le
+   scroll verrouillé après un retour arrière sur mobile
+========================================================= */
+
+window.addEventListener("pageshow", event => {
+  if(!event.persisted) return;
   closeDocumentModal();
 });
 
