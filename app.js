@@ -245,6 +245,25 @@ const FAQ = [
     contact:"rhPaie",
     documents:["versementsalaire"]
   },
+   
+    {
+    id:"dossieragent",
+    category:"Dossier administratif",
+    keywords:[
+      "dossier","dossier administratif","carrière","arrêté de nomination",
+       "titularisation","stagiairisation","situation administrative",
+       "position administrative","activité","détachement","disponibilité","congé parental",
+       "temps de travail","temps complet","temps non complet","temps partiel",
+       "cadre d'emplois","grade","échelon",
+       "affectation","mutation","résidence administrative",
+       "carrière", "avancement d'échelon","avancement de grade","promotion interne"
+    ],
+    title:"Question sur votre dossier administratif ou votre carrière",
+    answer:
+      "PVous avez une question concernant votre dossier administratif ou vous souhaitez signaler un changement de situation, contactez votre gestionnaire carrière.",
+    contact:"gestionnaireCarrière",
+    documents:["Gestcarr"]
+  },
 
   {
     id:"rib",
@@ -325,10 +344,10 @@ const FAQ = [
       "C.Conflans","espace agents","logiciel","logiciels",
       "ressources","application","applications"
     ],
-    title:"Problème de connexion à l'intranet ou à un logiciel",
+    title:"Problème de connexion à un logiciel",
     answer:
-      "Si vous n'arrivez pas à vous connecter à l'intranet, à votre Espace Agents ou à un autre logiciel, contactez le secteur Intranet.",
-    contact:"intranet"
+      "Si vous n'arrivez pas à vous connecter à votre Espace Agents ou à un autre logiciel, contactez le service Informatique.",
+    contact:"A créer"
   },
 
   {
