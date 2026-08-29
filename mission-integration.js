@@ -16,8 +16,8 @@ const MISSION_STEPS = [
   {
     from: "Sam",
     message:
-      "Salut ! 👋 Je viens d'arriver et je suis un peu perdu avec mes congés : " +
-      "si j'ai un souci avec mon compteur de jours, je dois contacter qui déjà ?",
+      "Salut ! 👋 Je viens d'arriver et je suis un peu perdu : " +
+      "je déménage et je veux mettre à jour ma nouvelle adresse, je dois contacter qui déjà ?",
     options: [
       "Le service informatique",
       "Mon gestionnaire carrière",
