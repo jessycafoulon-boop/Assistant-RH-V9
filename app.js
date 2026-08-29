@@ -462,7 +462,7 @@ const FAQ = [
     id:"arrêttravail",
     category:"Santé",
     keywords:[
-      "arrêt","arret","arrêt de travail","arret de travail"
+      "arrêt","arret","arrêt de travail","arret de travail","maladie",
     ],
     title:"Question sur votre arrêt de travail",
     answer:
