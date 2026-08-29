@@ -449,7 +449,7 @@ const FAQ = [
       "visite médicale","visite medicale","medecine du travail",
       "médecine du travail","médecin du travail","medecin du travail",
       "aptitude","inaptitude","reclassement",
-      "congé maladie","congé longue maladie",
+      "congé maladie","congé longue maladie","maladie",
       "congé longue durée","mi-temps thérapeutique",
       "mi temps therapeutique","santé au travail"
     ],
@@ -462,7 +462,7 @@ const FAQ = [
     id:"arrêttravail",
     category:"Santé",
     keywords:[
-      "arrêt","arret","arrêt de travail","arret de travail","maladie",
+      "arrêt","arret","arrêt de travail","arret de travail",
     ],
     title:"Question sur votre arrêt de travail",
     answer:
