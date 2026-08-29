@@ -102,11 +102,21 @@ const DOCUMENTS = {
   formulaireRIB:{
     title:"Formulaire de changement de coordonnées bancaires",
     description:
-      "Formulaire à utiliser pour transmettre un nouveau RIB.",
+      "Formulaire à utiliser pour transmettre un nouveau RIB",
     type:"formulaire",
     format:"Formulaire",
     url:"https://c.conflans.mairie-conflans.fr/#!/media/documents/df5ec181-0683-42e0-94d7-193218d840ff"
   },
+   
+  prevoyance:{
+    title:"Prévoyance - Maintien de salaire",
+    description:
+      "Prévoyance - Maintien de salaire",
+    type:"page",
+    format:"Page intranet",
+    url:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/79bbfa9a-7600-413b-a548-eb4492ff6a1a/viewdetail/"
+  },
+
 
   transmissiondocument:{
     title:"Comment transmettre vos documents au service RH",
@@ -283,6 +293,20 @@ const FAQ = [
       "Pour toute question sur le Supplément Familial de Traitement, la transmission ou le suivi de votre demande, contactez le secteur Paie.",
     contact:"rhPaie",
     documents:["SFT"]
+  },
+   
+    {
+    id:"prevoyance",
+    category:"Paie",
+    keywords:[
+      "prévoyance","prevoyance",
+       "maintien de salaire"
+    ],
+    title:"Question sur la prévoyance et le maintien de salaire",
+    answer:
+      "Pour toute question sur la Prévoyance et le maintien de salaire en cas de maladie, contactez le secteur Paie.",
+    contact:"rhPaie",
+    documents:["prevoyance"]
   },
     
     {
