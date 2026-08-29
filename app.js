@@ -134,8 +134,17 @@ const DOCUMENTS = {
     format:"Page intranet",
     url:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/72601d00-ac3a-416e-becf-58d4c729c93c/viewdetail/"
   },
-
-  CartePluxee:{
+   
+SFT:{
+    title:"Supplément Familial de Traitement 2026-2027",
+    description:
+      "Supplément Familial de Traitement 2026-2027",
+    type:"page",
+    format:"Page intranet",
+    url:"https://c.conflans.mairie-conflans.fr/#!/community/Ressources%2520Humaines/b1876ea4-a47a-4cb4-b84e-076eeade8ce6/d8bad4a4-3557-4feb-8087-54df234e8080/4b327ba3-3d51-47e7-9f30-6cd13e4794af/viewdetail/"
+},
+   
+   CartePluxee:{
     title:"Bulletin d'adhésion Pluxee",
     description:
       "Formulaire à compléter et transmettre au secteur Paie.",
@@ -236,7 +245,7 @@ const FAQ = [
     ],
     title:"Question sur une absence exceptionnelle (ASA)",
     answer:
-      "Pour une question concernant une absence exceptionnelle ou une ASA, contactez votre gestionnaire carrière.",
+      "Vous souhaitez transmettre un document ou vous avez une question concernant une absence exceptionnelle, contactez votre gestionnaire carrière.",
     contact:"gestionnaireCarriere",
     documents:["transmissiondocument","Gestcarr"]
   },
@@ -262,6 +271,20 @@ const FAQ = [
     documents:["versementsalaire"]
   },
    
+  {
+    id:"sft",
+    category:"Paie",
+    keywords:[
+      "supplément familial de traitement","supplement familial de traitement",
+       "supplément","supplement","formulaire sft","sft"
+    ],
+    title:"Question sur le Supplément Familial de Traitement (SFT)",
+    answer:
+      "Pour toute question sur le Supplément Familial de Traitement, la transmission ou le suivi de votre demande, contactez le secteur Paie.",
+    contact:"rhPaie",
+    documents:["SFT"]
+  },
+    
     {
     id:"dossieragent",
     category:"Dossier administratif",
