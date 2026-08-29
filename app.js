@@ -258,9 +258,9 @@ const FAQ = [
       "rémunération","fiche de paie","fiche de salaire",
       "bulletin de salaire","prime","prélèvement",
       "prelevement","remboursement","abonnement","transports",
-      "Navigo","indemnité","régime indemnitaire",
-      "RIFSEEP","IFSE","CIA","NBI","indice majoré","SFT",
-      "supplément familial","prélèvement à la source",
+      "Navigo","pass navigo","indemnité","régime indemnitaire",
+      "RIFSEEP","IFSE","CIA","NBI","indice majoré",
+      "prélèvement à la source",
       "retenue sur salaire","régularisation",
       "heures supplémentaires","astreinte","permanence"
     ],
