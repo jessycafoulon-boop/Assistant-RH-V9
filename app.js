@@ -1193,8 +1193,7 @@ addMessage(`
 
     <p>
       Et si vous avez envie de tester vos connaissances,
-      <strong>cliquez sur 🕵️ Aider Sam ?</strong>
-      ou lancez <strong>🎴 Les Incollables</strong>.
+      <strong>cliquez sur 🕵️ Aider Sam ?</strong>.
     </p>
 
   </div>
