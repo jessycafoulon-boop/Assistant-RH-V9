@@ -37,10 +37,18 @@
       avec les règles Firestore).
    4. ⚠️ La liste des matricules acceptés est visible dans ce
       fichier JS public, donc dans le code source téléchargé par
-      n'importe qui. Comme pour l'ancien code à 4 chiffres, ce
-      n'est qu'un frein contre un accès accidentel, pas une vraie
-      authentification — ne pas relâcher la vigilance sur la
-      règle 1 ci-dessus pour autant.
+      n'importe qui. Contrairement à l'ancien code à 4 chiffres,
+      chaque matricule a maintenant un vrai compte Firebase
+      Authentication avec mot de passe individuel (voir plus bas) :
+      connaître un matricule ne suffit plus à se faire passer pour
+      quelqu'un d'autre.
+   5. Mot de passe oublié : comme les comptes utilisent un faux
+      email interne (jamais un vrai email), aucun lien de
+      réinitialisation ne peut être envoyé. En cas d'oubli, un
+      administrateur doit supprimer le compte concerné dans la
+      console Firebase (Authentication → Users), ce qui permet à
+      l'agent de recréer un compte avec un nouveau mot de passe
+      à sa prochaine connexion.
 
    ---------------------------------------------------------
    COMMENT MODIFIER LES RESSOURCES OU LE CODE
@@ -559,78 +567,198 @@ function renderAnnuaireResults(indexed, rawQuery, resultsEl){
 }
 
 /* =========================================================
-   VERIFICATION DU CODE
+   CONNEXION EN DEUX ÉTAPES (matricule, puis mot de passe)
+   ---------------------------------------------------------
+   Étape 1 : le matricule saisi est vérifié contre la liste fermée
+   MANAGER_TEST_MATRICULES.
+   Étape 2 : un seul champ mot de passe. On ne cherche PAS à deviner
+   à l'avance si le compte existe déjà (Firebase ne le permet plus
+   de façon fiable, voir note dans manager-chat.js) : on tente
+   simplement la connexion via window.managerAuthLogin, qui crée le
+   compte automatiquement si c'est la première fois. Une fois
+   authentifié, on déchiffre les ressources (clé interne fixe,
+   inchangée) et on lance le chat avec ce matricule.
 ========================================================= */
 
-async function unlockManagerResources(){
-  const input = document.getElementById("managerPin");
+let managerCurrentMatricule = null;
+
+function isManagerLockedOut(){
+  return Date.now() < managerLockedUntil;
+}
+
+function showManagerLockoutIfAny(error){
+  if(!isManagerLockedOut()) return false;
+  const secondsLeft = Math.ceil((managerLockedUntil - Date.now()) / 1000);
+  error.textContent = `Trop de tentatives. Réessayez dans ${secondsLeft}s.`;
+  error.classList.add("active");
+  return true;
+}
+
+function registerManagerFailedAttempt(error, message){
+  managerFailedAttempts += 1;
+
+  if(managerFailedAttempts >= MANAGER_MAX_ATTEMPTS){
+    managerLockedUntil = Date.now() + MANAGER_LOCKOUT_MS;
+    managerFailedAttempts = 0;
+    error.textContent = `Trop de tentatives. Réessayez dans ${Math.ceil(MANAGER_LOCKOUT_MS / 1000)}s.`;
+  }else{
+    error.textContent = message;
+  }
+  error.classList.add("active");
+}
+
+function handleMatriculeStep(){
+  const input = document.getElementById("managerMatricule");
   const error = document.getElementById("managerPinError");
-  const gate = document.getElementById("managerGate");
-  const button = document.getElementById("managerPinSubmit");
+  const step1 = document.getElementById("managerGateStep1");
 
-  if(!input || !error || !gate) return;
+  if(!input || !error || !step1) return;
 
-  const now = Date.now();
+  if(showManagerLockoutIfAny(error)) return;
 
-  if(now < managerLockedUntil){
-    const secondsLeft = Math.ceil((managerLockedUntil - now) / 1000);
-    error.textContent = `Trop de tentatives. Réessayez dans ${secondsLeft}s.`;
+  const matricule = input.value.trim();
+  error.classList.remove("active");
+
+  if(!MANAGER_TEST_MATRICULES.includes(matricule)){
+    registerManagerFailedAttempt(error, "Matricule non reconnu.");
+    return;
+  }
+
+  managerCurrentMatricule = matricule;
+  step1.hidden = true;
+  renderManagerGateStep2();
+}
+
+function renderManagerGateStep2(){
+  const step2 = document.getElementById("managerGateStep2");
+  if(!step2) return;
+
+  step2.hidden = false;
+  step2.innerHTML = `
+    <p class="manager-gate-step2-hint">
+      Saisissez votre mot de passe. Si c'est votre toute première
+      connexion, ce mot de passe sera créé automatiquement pour vous
+      (retenez-le bien, vous le ressaisirez à chaque connexion).
+    </p>
+    <div class="manager-pin-row">
+      <input id="managerPassword" class="manager-pin-input" type="password"
+             autocomplete="current-password" placeholder="Mot de passe" aria-label="Mot de passe">
+      <button id="managerPasswordSubmit" class="manager-pin-submit" type="button">
+        Continuer
+      </button>
+    </div>
+    <button id="managerGateBack" type="button" class="manager-gate-back">← Ce n'est pas mon matricule</button>
+  `;
+
+  document.getElementById("managerPasswordSubmit").addEventListener("click", handleManagerPasswordSubmit);
+  document.getElementById("managerPassword").addEventListener("keydown", event => {
+    if(event.key === "Enter"){
+      event.preventDefault();
+      handleManagerPasswordSubmit();
+    }
+  });
+  document.getElementById("managerGateBack").addEventListener("click", resetManagerGateToStep1);
+
+  document.getElementById("managerPassword").focus();
+}
+
+function resetManagerGateToStep1(){
+  managerCurrentMatricule = null;
+
+  const step1 = document.getElementById("managerGateStep1");
+  const step2 = document.getElementById("managerGateStep2");
+  const error = document.getElementById("managerPinError");
+  const input = document.getElementById("managerMatricule");
+
+  if(step2){ step2.hidden = true; step2.innerHTML = ""; }
+  if(step1) step1.hidden = false;
+  if(error) error.classList.remove("active");
+  if(input){ input.value = ""; input.focus(); }
+}
+
+async function handleManagerPasswordSubmit(){
+  const error = document.getElementById("managerPinError");
+  const passwordInput = document.getElementById("managerPassword");
+  const button = document.getElementById("managerPasswordSubmit");
+
+  if(!error || !passwordInput) return;
+  if(showManagerLockoutIfAny(error)) return;
+
+  const password = passwordInput.value;
+
+  if(password.length < 6){
+    error.textContent = "Le mot de passe doit contenir au moins 6 caractères.";
     error.classList.add("active");
     return;
   }
 
-  const matricule = input.value.trim();
-
-  if(!MANAGER_TEST_MATRICULES.includes(matricule)){
-    error.textContent = "Matricule non reconnu.";
+  if(typeof window.managerAuthLogin !== "function"){
+    error.textContent = "Le service de connexion n'a pas pu se charger. Rechargez la page.";
     error.classList.add("active");
     return;
   }
 
   if(button) button.disabled = true;
+  error.classList.remove("active");
+
+  try{
+    await window.managerAuthLogin(managerCurrentMatricule, password);
+    managerFailedAttempts = 0;
+    await unlockManagerResourcesAfterAuth();
+  }catch(err){
+    console.error("Erreur de connexion :", err);
+
+    if(err && err.code === "auth/wrong-password"){
+      registerManagerFailedAttempt(error, "Mot de passe incorrect.");
+    }else if(err && err.code === "auth/weak-password"){
+      error.textContent = "Mot de passe trop faible (6 caractères minimum).";
+      error.classList.add("active");
+    }else{
+      error.textContent = "Impossible de vous connecter pour le moment. Réessayez.";
+      error.classList.add("active");
+    }
+
+    if(button) button.disabled = false;
+    passwordInput.select();
+  }
+}
+
+async function unlockManagerResourcesAfterAuth(){
+  const gate = document.getElementById("managerGate");
+  const error = document.getElementById("managerPinError");
+  if(!gate) return;
 
   const resources = await decryptResources(MANAGER_RESOURCES_KEY);
 
-  if(resources){
-    managerFailedAttempts = 0;
-    error.classList.remove("active");
-    gate.hidden = true;
-    renderResources(resources);
-    initManagerSearch();
-    initAnnuaireSearches(resources);
-    initContactsSearches(resources);
-
-    const chatContainer = document.getElementById("managerChatContainer");
-    if(chatContainer){
-      chatContainer.hidden = false;
-      if(typeof window.initManagerChat === "function") window.initManagerChat(matricule);
+  if(!resources){
+    if(error){
+      error.textContent = "Erreur inattendue lors du chargement des ressources.";
+      error.classList.add("active");
     }
-  }else{
-    managerFailedAttempts += 1;
+    return;
+  }
 
-    if(managerFailedAttempts >= MANAGER_MAX_ATTEMPTS){
-      managerLockedUntil = Date.now() + MANAGER_LOCKOUT_MS;
-      managerFailedAttempts = 0;
-      error.textContent = `Trop de tentatives. Réessayez dans ${Math.ceil(MANAGER_LOCKOUT_MS / 1000)}s.`;
-    }else{
-      error.textContent = "Une erreur est survenue. Réessayez.";
-    }
+  gate.hidden = true;
+  renderResources(resources);
+  initManagerSearch();
+  initAnnuaireSearches(resources);
+  initContactsSearches(resources);
 
-    error.classList.add("active");
-    input.select();
-
-    if(button) button.disabled = false;
+  const chatContainer = document.getElementById("managerChatContainer");
+  if(chatContainer){
+    chatContainer.hidden = false;
+    if(typeof window.initManagerChat === "function") window.initManagerChat(managerCurrentMatricule);
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const input = document.getElementById("managerPin");
+  const input = document.getElementById("managerMatricule");
   if(!input) return;
 
   input.focus();
 
   input.addEventListener("input", () => {
-    input.value = input.value.replace(/\D/g, "").slice(0, 4);
+    input.value = input.value.replace(/\D/g, "").slice(0, 10);
     const error = document.getElementById("managerPinError");
     if(error) error.classList.remove("active");
   });
@@ -638,12 +766,12 @@ document.addEventListener("DOMContentLoaded", () => {
   input.addEventListener("keydown", event => {
     if(event.key === "Enter"){
       event.preventDefault();
-      unlockManagerResources();
+      handleMatriculeStep();
     }
   });
 
-  document.getElementById("managerPinSubmit")
-    ?.addEventListener("click", unlockManagerResources);
+  document.getElementById("managerMatriculeSubmit")
+    ?.addEventListener("click", handleMatriculeStep);
 });
 
 /* =========================================================
